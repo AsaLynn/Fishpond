@@ -4,22 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.fishpond.demo.databinding.ActivityMainBinding
+import com.fishpond.demo.databinding.ActivitySeafloorBinding
 import com.water.fish.PetFish
 import com.water.fish.ShoalFish
 
 /**
- *
+ * 海底页面底部.
  */
-class MainActivity : AppCompatActivity() {
+class SeafloorActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
         fun jumpTo(context: Context) {
-            context.startActivity(Intent(context, MainActivity::class.java))
+            context.startActivity(Intent(context, SeafloorActivity::class.java))
         }
     }
-
 
     private val petFish by lazy {
         PetFish().apply {
@@ -33,15 +32,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val mBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+        ActivitySeafloorBinding.inflate(layoutInflater)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
-        setContentView(mBinding.root)
         //mBinding.fishLayout.setFishData(mutableListOf(petFish))
+        setContentView(mBinding.root)
         mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
             skinResId = R.mipmap.fish_group_1
         }))
@@ -62,6 +60,4 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         mBinding.fishLayout.end()
     }
-
-
 }

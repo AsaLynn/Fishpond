@@ -2,18 +2,16 @@ package com.water.fish
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.zxn.popup.EasyPopup
 import com.zxn.popup.XGravity
 import com.zxn.popup.YGravity
@@ -21,24 +19,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
- *  鱼塘布局.
- *  Created by zxn on 2021/3/29.
+ *  海底布局.
+ *  参考资料:
+ *  https://www.jianshu.com/p/036aecb64093
+ *  Created by zxn on 2021/5/26.
  **/
-class FishpondLayout : ViewGroup, View.OnClickListener {
-
-    constructor(context: Context) : this(context, null)
-
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
-        setWillNotDraw(false)
-        isClickable = false
-        onInitAttributeSet(attrs)
-    }
+class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     companion object {
         private const val TAG = "FishpondLayout"
@@ -57,6 +43,31 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
         private const val HANDLER_101 = 101 //从右到左  直线
 
     }
+
+    constructor(context: Context) : this(context, null)
+
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        //setWillNotDraw(false)
+        isClickable = false
+        onInitAttributeSet(attrs)
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        //计算鱼宠游动范围的最大高度
+        fishPetAreaH = height - waterBottomHeight
+        if (fishPetAreaH <= 0) {
+            fishPetAreaH = height
+        }
+        addRoutePoint()
+    }
+
 
     private val fishEntityList = mutableListOf<FishEntity>()
 
@@ -91,55 +102,6 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
             .apply()
     }
 
-    /**
-     * 计算所有ChildView的宽度和高度 然后根据ChildView的计算结果，设置自己的宽和高
-     * @param widthMeasureSpec  父类传递过来给当前ViewGroup的宽度建议值
-     * @param heightMeasureSpec 父类传递过来给当前ViewGroup的高度建议值
-     */
-    @SuppressLint("DrawAllocation")
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        Log.i(TAG, "onMeasure: ")
-        val sizeWidth = MeasureSpec.getSize(widthMeasureSpec)
-        val sizeHeight = MeasureSpec.getSize(heightMeasureSpec)
-        setMeasuredDimension(
-            sizeWidth,
-            sizeHeight
-        )
-        for (i in 0 until childCount) {
-            getChildAt(i).run {
-                if (this.visibility != GONE) {
-                    measureChild(this, widthMeasureSpec, heightMeasureSpec)
-                }
-            }
-        }
-    }
-
-    /**
-     * 对子View的位置进行排列
-     * 为每个子View分配大小和位置，从布局调用。
-     * @param changed true:大小或位置发生变化,
-     * @param l 左侧位置，相对于父级位置
-     * @param t 上侧位置，相对于父级位置
-     * @param r 右侧位置，相对于父级位置
-     * @param b 下侧位置，相对于父级位置
-     */
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        //计算鱼宠游动范围的最大高度
-        fishPetAreaH = height - waterBottomHeight
-        if (fishPetAreaH <= 0) {
-            fishPetAreaH = height
-        }
-
-        addRoutePoint()
-
-        for (i in 0 until childCount) {
-            fishEntityList[i].run {
-                layoutFish(this, getChildAt(i))
-            }
-        }
-
-    }
-
     override fun onClick(v: View) {
         if (!mTipsPop.isShowing) {
             if (fishEntityList.isNotEmpty() && fishEntityList[0] is PetFish) {
@@ -170,38 +132,6 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
         }
     }
 
-    /**
-     * 布局容器中的鱼儿.
-     */
-    private fun layoutFish(fish: FishEntity, view: View) {
-        if (fish is PetFish) {
-            if (fish.isSwimming) {
-                view.run {
-                    val fishWidth = measuredWidth
-                    val fishHeight = measuredHeight
-                    val swimmingPoint = fish.swimmingPoint(progress, findViewById(R.id.ivFish))
-                    val childL = swimmingPoint.x - fishWidth / 2
-                    val childT = swimmingPoint.y - fishHeight / 2
-                    val childR = swimmingPoint.x + fishWidth / 2
-                    val childB = swimmingPoint.y + fishHeight / 2
-                    this.layout(childL, childT, childR, childB)
-                }
-            } else {
-                objectAnimator.pause()
-                postDelayed({
-                    fish.isSwimming = true
-                    objectAnimator.resume()
-                }, 1000L * 2)
-            }
-        } else {
-            view.also {
-                if (it is ImageView) {
-                    Glide.with(it).load(fish.skinResId).into(it)
-                }
-                it.layout(0, height - measuredHeight / 2, measuredWidth, height)
-            }
-        }
-    }
 
     /**
      * 装载游泳路线坐标点
@@ -280,11 +210,16 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
                     LayoutInflater.from(context).inflate(R.layout.layout_fish_pet, this, false)
                 addView(fishView)
                 fishView.setOnClickListener(this)
-                entity.setSprayChangeListener {
-                    Glide.with(context).load(it).into(fishView.findViewById(R.id.ivFish))
+                if (!entity.swimPath.isEmpty){
+                    val ivFish = fishView.findViewById<ImageView>(R.id.ivFish)
+                    petFishAnimator = ObjectAnimator.ofFloat(ivFish, "x", "y", entity.swimPath).apply {
+                        addListener(petFishAnimatorListener)
+                        interpolator = PathInterpolator(entity.swimPath)
+                        duration = SPEED * 1000
+                        this.start()
+                    }
                 }
             } else {
-                // if (entity is ShoalFish)  layout_fish_shoal.
                 val fishView =
                     LayoutInflater.from(context).inflate(R.layout.layout_fish_shoal, this, false)
                 addView(fishView)
@@ -321,9 +256,9 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
 
         notifyDataSetChanged()
 
-        if (!objectAnimator.isPaused && !objectAnimator.isStarted) {
+        /*if (!objectAnimator.isPaused && !objectAnimator.isStarted) {
             objectAnimator.start()
-        }
+        }*/
     }
 
     fun pause() {
@@ -417,8 +352,79 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
         iv.startAnimation(animationSet)
     }
 
+    private val petFishAnimatorListener = object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator) {
+
+        }
+
+        override fun onAnimationEnd(animation: Animator) {
+
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+
+        }
+
+        override fun onAnimationRepeat(animation: Animator?) {
+
+        }
+
+    }
+
+    private var petFishAnimator: ObjectAnimator? = null
+
+
 }
 
+
+//    /**
+//     * 计算所有ChildView的宽度和高度 然后根据ChildView的计算结果，设置自己的宽和高
+//     * @param widthMeasureSpec  父类传递过来给当前ViewGroup的宽度建议值
+//     * @param heightMeasureSpec 父类传递过来给当前ViewGroup的高度建议值
+//     */
+//    @SuppressLint("DrawAllocation")
+//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        Log.i(TAG, "onMeasure: ")
+//        val sizeWidth = MeasureSpec.getSize(widthMeasureSpec)
+//        val sizeHeight = MeasureSpec.getSize(heightMeasureSpec)
+//        setMeasuredDimension(
+//            sizeWidth,
+//            sizeHeight
+//        )
+//        for (i in 0 until childCount) {
+//            getChildAt(i).run {
+//                if (this.visibility != GONE) {
+//                    measureChild(this, widthMeasureSpec, heightMeasureSpec)
+//                }
+//            }
+//        }
+//    }
+
+//    /**
+//     * 对子View的位置进行排列
+//     * 为每个子View分配大小和位置，从布局调用。
+//     * @param changed true:大小或位置发生变化,
+//     * @param l 左侧位置，相对于父级位置
+//     * @param t 上侧位置，相对于父级位置
+//     * @param r 右侧位置，相对于父级位置
+//     * @param b 下侧位置，相对于父级位置
+//     */
+//    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+//        //计算鱼宠游动范围的最大高度
+//        fishPetAreaH = height - waterBottomHeight
+//        if (fishPetAreaH <= 0) {
+//            fishPetAreaH = height
+//        }
+//
+//        addRoutePoint()
+//
+//        for (i in 0 until childCount) {
+//            fishEntityList[i].run {
+//                layoutFish(this, getChildAt(i))
+//            }
+//        }
+//
+//    }
 
 //    protected fun dp2px(dp: Float): Int {
 //        val scale: Float = mContext.getResources().getDisplayMetrics().density
@@ -428,5 +434,38 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
 //    protected fun sp2px(sp: Float): Int {
 //        val scale: Float = this.mContext.getResources().getDisplayMetrics().scaledDensity
 //        return (sp * scale + 0.5f).toInt()
+//    }
+
+//    /**
+//     * 布局容器中的鱼儿.
+//     */
+//    private fun layoutFish(fish: FishEntity, view: View) {
+//        if (fish is PetFish) {
+//            if (fish.isSwimming) {
+//                view.run {
+//                    val fishWidth = measuredWidth
+//                    val fishHeight = measuredHeight
+//                    val swimmingPoint = fish.swimmingPoint(progress, findViewById(R.id.ivFish))
+//                    val childL = swimmingPoint.x - fishWidth / 2
+//                    val childT = swimmingPoint.y - fishHeight / 2
+//                    val childR = swimmingPoint.x + fishWidth / 2
+//                    val childB = swimmingPoint.y + fishHeight / 2
+//                    this.layout(childL, childT, childR, childB)
+//                }
+//            } else {
+//                objectAnimator.pause()
+//                postDelayed({
+//                    fish.isSwimming = true
+//                    objectAnimator.resume()
+//                }, 1000L * 2)
+//            }
+//        } else {
+//            view.also {
+//                if (it is ImageView) {
+//                    Glide.with(it).load(fish.skinResId).into(it)
+//                }
+//                it.layout(0, height - measuredHeight / 2, measuredWidth, height)
+//            }
+//        }
 //    }
 

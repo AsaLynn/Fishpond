@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivWaterBg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.zxn.titleview.TitleView
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_title_height"
+        android:layout_marginTop="@dimen/dp_35"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="饮水"
+        app:titleTextColor="@color/white"
+        app:titleTextSize="@dimen/sp_17" />
+
+    <ImageView
+        android:id="@+id/ivDrinkTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+
+        app:layout_constraintBottom_toBottomOf="@id/ivWaterBg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivTabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        app:layout_constraintBottom_toBottomOf="@id/ivDrinkTab"
+        app:layout_constraintLeft_toLeftOf="@id/ivDrinkTab"
+        app:layout_constraintRight_toRightOf="@id/ivDrinkTab"
+        app:layout_constraintTop_toTopOf="@id/ivDrinkTab" />
+
+    <TextView
+        android:id="@+id/tvRevoke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_27"
+        android:text="撤销"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
+        app:layout_constraintRight_toLeftOf="@id/ivTabAdd"
+        app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
+
+    <TextView
+        android:id="@+id/tvSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_27"
+        android:text="商店"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
+        app:layout_constraintRight_toLeftOf="@id/tvRevoke"
+        app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
+
+    <TextView
+        android:id="@+id/tvToday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_27"
+
+        android:text="今日"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
+        app:layout_constraintLeft_toRightOf="@id/ivTabAdd"
+        app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
+
+    <TextView
+        android:id="@+id/tvClockOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_27"
+        android:text="打卡"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
+        app:layout_constraintLeft_toRightOf="@id/tvToday"
+        app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategory"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:fadeScrollbars="false"
+        android:fadingEdge="none"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/ivDrinkTab"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.water.fish.SeafloorLayout
+        android:id="@+id/fishLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_120"
+        android:background="#00c0c4"
+        app:layout_constraintBottom_toTopOf="@id/rvCategory"
+        app:layout_constraintTop_toBottomOf="@id/titleView"
+        app:paddingPetAreaLeft="@dimen/dp_80"
+        app:waterBottomHeight="@dimen/dp_80" />
+
+    <ImageView
+        android:id="@+id/spoutView"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_0"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginBottom="@dimen/spout_bottom_margin"
+        app:layout_constraintBottom_toBottomOf="@id/fishLayout"
+        app:layout_constraintLeft_toLeftOf="@id/fishLayout"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <ImageView
+        android:id="@+id/ivShells"
+        android:layout_width="74dp"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginRight="@dimen/dp_10"
+
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <ImageView
+        android:id="@+id/ivShellCoin"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_marginLeft="@dimen/dp_5"
+        app:layout_constraintBottom_toBottomOf="@id/ivShells"
+        app:layout_constraintLeft_toLeftOf="@id/ivShells"
+        app:layout_constraintTop_toTopOf="@id/ivShells" />
+
+    <TextView
+        android:id="@+id/tvShellCoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_5"
+        android:drawablePadding="2dp"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintBottom_toBottomOf="@id/ivShells"
+        app:layout_constraintRight_toRightOf="@id/ivShells"
+        app:layout_constraintTop_toTopOf="@id/ivShells" />
+
+
+    <TextView
+        android:id="@+id/tvComponent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginRight="@dimen/dp_40"
+        android:text="摄入成份"
+        android:textColor="#ffffffff"
+        android:textSize="9sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivShells" />
+
+    <TextView
+        android:id="@+id/tvHeatValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:drawablePadding="@dimen/dp_4"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffffffff"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/tvComponent"
+        app:layout_constraintTop_toBottomOf="@id/tvComponent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:text="kcal"
+        android:textColor="#ffffffff"
+        android:textSize="9sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvHeatValue"
+        app:layout_constraintLeft_toRightOf="@id/tvHeatValue"
+        app:layout_constraintTop_toTopOf="@id/tvHeatValue" />
+
+    <TextView
+        android:id="@+id/tvHeatName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_1"
+        android:text="热量"
+        android:textColor="#ffffffff"
+        android:textSize="9sp"
+        app:layout_constraintLeft_toLeftOf="@id/tvHeatValue"
+        app:layout_constraintTop_toBottomOf="@id/tvHeatValue" />
+
+    <TextView
+        android:id="@+id/tvSugarValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:drawablePadding="@dimen/dp_4"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffffffff"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/tvHeatValue"
+        app:layout_constraintTop_toBottomOf="@id/tvHeatName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:text="g"
+        android:textColor="#ffffffff"
+        android:textSize="9sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvSugarValue"
+        app:layout_constraintLeft_toRightOf="@id/tvSugarValue"
+        app:layout_constraintTop_toTopOf="@id/tvSugarValue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_1"
+        android:text="糖份"
+        android:textColor="#ffffffff"
+        android:textSize="9sp"
+        app:layout_constraintLeft_toLeftOf="@id/tvSugarValue"
+        app:layout_constraintTop_toBottomOf="@id/tvSugarValue" />
+
+    <ImageView
+        android:id="@+id/ivStone"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_80"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/rvCategory"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAIShell"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginBottom="@dimen/dp_72"
+        app:layout_constraintBottom_toBottomOf="@id/ivStone"
+        app:layout_constraintLeft_toLeftOf="@id/ivStone"
+        app:layout_constraintRight_toRightOf="@id/ivStone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

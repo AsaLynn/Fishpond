@@ -47,7 +47,7 @@ sealed class FishEntity {
 
     private val tan = FloatArray(2)
 
-    private val swimPath by lazy {
+    val swimPath by lazy {
 
         createPath().also {
             if (it.isEmpty) {
@@ -370,8 +370,8 @@ class PetFish : FishEntity() {
 
         lastFishStatus = fishStatus
         fishStatus = status
-       /* val w = fishView.resources.getDimension(R.dimen.pet_fish_width).toInt()
-        val h = fishView.resources.getDimension(R.dimen.pet_fish_height).toInt()*/
+        /* val w = fishView.resources.getDimension(R.dimen.pet_fish_width).toInt()
+         val h = fishView.resources.getDimension(R.dimen.pet_fish_height).toInt()*/
         when (fishStatus) {
             /*FishStatus.SPRAY_START, FishStatus.SPRAY_STOP -> {
                 Glide.with(fishView).apply {
