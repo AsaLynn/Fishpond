@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dp_title_height">40dp</dimen>
+    <dimen name="dp_48">48dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_72">72dp</dimen>
+    <dimen name="dp_52">52dp</dimen>
+    <dimen name="dp_173">173dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
+    <dimen name="dp_34">34dp</dimen>
+    <dimen name="dp_350">350dp</dimen>
+    <dimen name="spout_bottom_margin">95dp</dimen>
+    <dimen name="dp_73">73dp</dimen>
+    <dimen name="dp_0.5">0.5dp</dimen>
+    <dimen name="dp_33">33dp</dimen>
+    <dimen name="dp_1.5">1.5dp</dimen>
+    <dimen name="dp_35.5">35.5dp</dimen>
+    <dimen name="dp_34.5">34.5dp</dimen>
+    <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_142">142dp</dimen>
+    <dimen name="dp_172">172dp</dimen>
+
+</resources>

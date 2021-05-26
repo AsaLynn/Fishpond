@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FishpondLayout">
+        <attr name="fishPetAreaHeight" format="dimension|reference" />
+        <attr name="waterBottomHeight" format="dimension|reference" />
+        <attr name="paddingPetAreaLeft" format="dimension|reference" />
+    </declare-styleable>
+</resources>
+
+
+<!--
+app:waterBottomHeight="@dimen/dp_80"
+app:AreaHeight="@dimen/dp_330"
+app:fishPetAreaHeight="@dimen/dp_330"
+<attr name="waterBottomHeight" format="dimension|reference" />
+-->
