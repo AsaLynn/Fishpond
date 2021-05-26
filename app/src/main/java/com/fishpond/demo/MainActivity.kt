@@ -35,5 +35,23 @@ class MainActivity : AppCompatActivity() {
         mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
             skinResId = R.mipmap.fish_group_1
         }))
+
     }
+
+    override fun onResume() {
+        super.onResume()
+        mBinding.fishLayout.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBinding.fishLayout.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBinding.fishLayout.end()
+    }
+
+
 }
