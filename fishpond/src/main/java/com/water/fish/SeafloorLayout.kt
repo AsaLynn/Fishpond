@@ -12,11 +12,11 @@ import android.view.View
 import android.view.animation.*
 import android.widget.FrameLayout
 import android.widget.TextView
+import com.water.fish.holder.DrawableHolder
 import com.zxn.popup.EasyPopup
 import com.zxn.popup.XGravity
 import com.zxn.popup.YGravity
 import pl.droidsonroids.gif.AnimationListener
-import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.collections.ArrayList
@@ -101,7 +101,8 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         override fun onAnimationStart(animation: Animator) {
             //Glide.with(context).load(fishEntityList[0].moveLeftResId).into(ivFish)
             //val gifFromResource = GifDrawable(resources, R.drawable.anim)
-            ivFish.setImageResource(fishEntityList[0].moveLeftResId)
+            //ivFish.setImageResource(fishEntityList[0].moveLeftResId)
+            ivFish.setImageDrawable(drawableHolder?.moveLeftDrawable)
         }
 
         override fun onAnimationEnd(animation: Animator) {
@@ -138,47 +139,30 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         } else if (isInPointRect(petPointList[2], x, y)) {
             it.pause()
             //Glide.with(context).load(fishEntityList[0].turnRightResId).into(ivFish)
-            ivFish.setImageResource(fishEntityList[0].turnRightResId)
-            if (ivFish.drawable is GifDrawable) {
-                val gifDrawable = ivFish.drawable as GifDrawable
-                gifDrawable.loopCount = 1
-                //getNumberOfFrames()
-                gifDrawable.addAnimationListener(mAnimationListener)
-                gifDrawable.addAnimationListener { count ->
-                    Log.i(TAG, ": count:$count")
-                    //gifDrawable.stop()
-                    /*if(it.isPaused){
-                        it.resume()
-                        ivFish.setImageResource(fishEntityList[0].moveLeftResId)
-                    }*/
-                }
-                /*postDelayed({
+            //ivFish.setImageResource(fishEntityList[0].turnRightResId)
+            drawableHolder?.let { holder ->
+                /*holder.turnRightDrawable.addAnimationListener { num ->
+                    Log.i(TAG, "num: $num")
+                    //it.resume()
+                    ivFish.setImageDrawable(drawableHolder?.moveRightDrawable)
+                }*/
+                ivFish.setImageDrawable(holder.turnRightDrawable)
+                //val duration = holder.turnRightDrawable.duration
+                val duration = 40L
+                postDelayed({
                     it.resume()
-                }, gifDrawable.duration.toLong())*/
+                    ivFish.setImageDrawable(drawableHolder?.moveRightDrawable)
+                }, duration.toLong())
             }
-
-            //ivFish.setImageDrawable(gifDrawable)
+        } else if (isInPointRect(petPointList[3], x, y)) {
+            it.pause()
         }
     }
 
-    private val gifDrawable by lazy {
-        GifDrawable(resources, fishEntityList[0].turnRightResId).apply {
-            loopCount = 1
-            //currentFrameIndex
-            //addAnimationListener(mAnimationListener)
-        }
-    }
-
-    private val mAnimationListener = AnimationListener {
+    private val turnRightListener = AnimationListener {
         Log.i(TAG, ": count:$it")
-        //it.resume()
-        //gifDrawable.stop()
-        //gifDrawable.removeAnimationListener(mAnimationListener)
-        //petFishAnimator.resume()
-        if (ivFish.drawable is GifDrawable) {
-            val gifDrawable = ivFish.drawable as GifDrawable
-            //gifDrawable.removeAnimationListener(mAnimationListener)
-        }
+        //ivFish.setImageDrawable(drawableHolder?.moveRightDrawable)
+        petFishAnimator.resume()
     }
 
     private val petFishAnimator by lazy {
@@ -264,11 +248,13 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         }
     }
 
+    private var drawableHolder: DrawableHolder? = null
+
+
     private fun notifyDataSetChanged() {
         fishEntityList.forEachIndexed { _, entity ->
             if (entity is PetFish) {
-                //addRoutePoint()
-                //petFishAnimator.start()
+                drawableHolder = DrawableHolder.create(resources, entity, turnRightListener)
             } else {
                 /*val fishView =
                     LayoutInflater.from(context).inflate(R.layout.layout_fish_shoal, this, false)
@@ -480,7 +466,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     }
 
     private fun isInPointRect(point: Point, x: Float, y: Float): Boolean =
-        abs(point.x - (x + 0.5F).toInt()) < 10 && abs(point.y - (y + 0.5F).toInt()) < 10
+        abs(point.x - (x + 0.5F).toInt()) < 8 && abs(point.y - (y + 0.5F).toInt()) < 5
 
     fun testPathAnimator() {
         val path = Path().apply {
