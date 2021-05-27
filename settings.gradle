@@ -1,4 +1,4 @@
 rootProject.name = "Fishpond"
 include ':app'
 include ':fishpond'
-include ':animsurfacedemo'
+//include ':animsurfacedemo'

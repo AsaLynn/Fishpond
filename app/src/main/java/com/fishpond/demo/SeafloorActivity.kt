@@ -3,6 +3,7 @@ package com.fishpond.demo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fishpond.demo.databinding.ActivitySeafloorBinding
 import com.water.fish.PetFish
@@ -37,16 +38,30 @@ class SeafloorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
-        //mBinding.fishLayout.setFishData(mutableListOf(petFish))
         setContentView(mBinding.root)
+
         mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
             skinResId = R.mipmap.fish_group_1
         }))
 
+        mBinding.fishLayout.start()
+
+        mBinding.tvStart.setOnClickListener {
+            Toast.makeText(this, "开始", Toast.LENGTH_SHORT).show()
+            mBinding.fishLayout.start()
+        }
+        mBinding.tvPause.setOnClickListener {
+            mBinding.fishLayout.pause()
+        }
+        mBinding.tvResume.setOnClickListener {
+            mBinding.fishLayout.resume()
+        }
+        mBinding.tvEnd.setOnClickListener {
+            mBinding.fishLayout.end()
+        }
     }
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
         mBinding.fishLayout.resume()
     }
@@ -59,5 +74,6 @@ class SeafloorActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mBinding.fishLayout.end()
-    }
+    }*/
+
 }

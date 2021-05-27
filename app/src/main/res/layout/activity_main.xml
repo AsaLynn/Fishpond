@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="@id/ivDrinkTab" />
 
     <TextView
-        android:id="@+id/tvRevoke"
+        android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_27"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
 
     <TextView
-        android:id="@+id/tvSwitch"
+        android:id="@+id/tvStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_27"
@@ -63,11 +63,11 @@
         android:textColor="#00c0c4"
         android:textSize="@dimen/sp_10"
         app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
-        app:layout_constraintRight_toLeftOf="@id/tvRevoke"
+        app:layout_constraintRight_toLeftOf="@id/tvEnd"
         app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
 
     <TextView
-        android:id="@+id/tvToday"
+        android:id="@+id/tvPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_27"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
 
     <TextView
-        android:id="@+id/tvClockOff"
+        android:id="@+id/tvResume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_27"
@@ -88,7 +88,7 @@
         android:textColor="#00c0c4"
         android:textSize="@dimen/sp_10"
         app:layout_constraintBottom_toBottomOf="@id/ivTabAdd"
-        app:layout_constraintLeft_toRightOf="@id/tvToday"
+        app:layout_constraintLeft_toRightOf="@id/tvPause"
         app:layout_constraintTop_toTopOf="@id/ivTabAdd" />
 
     <androidx.recyclerview.widget.RecyclerView

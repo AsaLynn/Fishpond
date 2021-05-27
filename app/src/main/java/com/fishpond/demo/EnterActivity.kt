@@ -15,7 +15,6 @@ class EnterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_enter)
         setContentView(mBinding.root)
         mBinding.btnA.setOnClickListener {
             MainActivity.jumpTo(this)
@@ -23,6 +22,7 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnB.setOnClickListener {
             SeafloorActivity.jumpTo(this)
         }
+        SeafloorActivity.jumpTo(this)
     }
 
 
