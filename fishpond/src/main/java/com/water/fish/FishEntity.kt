@@ -239,7 +239,7 @@ class PetFish : FishEntity() {
     /**
      * 开启喷水:true,停止喷水:false.
      */
-    private var isSpraying = false
+    var isSpraying = false
 
     private var onSprayChangeListener: ((value: Int) -> Unit)? = null
 

@@ -59,9 +59,21 @@ class SeafloorActivity : AppCompatActivity() {
         mBinding.tvEnd.setOnClickListener {
             mBinding.fishLayout.end()
         }
+        mBinding.btnOpen.setOnClickListener {
+            DemoActivity.jumpTo(this)
+        }
+        mBinding.btnChange.setOnClickListener {
+            petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+            mBinding.fishLayout.notifyDataSetChanged()
+        }
+        mBinding.btnSpray.setOnClickListener {
+            petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+            petFish.isSpraying = !petFish.isSpraying
+            mBinding.fishLayout.notifyDataSetChanged()
+        }
     }
 
-    /*override fun onResume() {
+    override fun onResume() {
         super.onResume()
         mBinding.fishLayout.resume()
     }
@@ -74,6 +86,6 @@ class SeafloorActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mBinding.fishLayout.end()
-    }*/
+    }
 
 }

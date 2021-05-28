@@ -9,10 +9,42 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_title_height"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="饮水"
-        app:titleTextColor="@color/white"
+        app:titleText="海世界"
+        app:titleTextColor="@color/black"
         app:titleTextSize="@dimen/sp_17" />
 
+    <Button
+        android:id="@+id/btnOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="打开"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="切换"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintLeft_toRightOf="@id/btnOpen"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnSpray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="喷水"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintLeft_toRightOf="@id/btnChange"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
 
     <TextView
         android:id="@+id/tvStart"
@@ -75,8 +107,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvStart"
         app:layout_constraintTop_toBottomOf="@id/titleView"
         app:paddingPetAreaLeft="@dimen/dp_10"
-        app:waterBottomHeight="@dimen/dp_80"
-         />
+        app:waterBottomHeight="@dimen/dp_80" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
