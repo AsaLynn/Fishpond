@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fishpond.demo.databinding.ActivitySeafloorBinding
 import com.water.fish.PetFish
+import com.water.fish.Shell
 import com.water.fish.ShoalFish
 
 /**
@@ -32,6 +33,13 @@ class SeafloorActivity : AppCompatActivity() {
         }
     }
 
+    private val mShell by lazy {
+        Shell().apply {
+            shellResId = R.mipmap.ic_shell
+            stoneResId = R.mipmap.bg_stone_platform
+        }
+    }
+
     private val mBinding by lazy {
         ActivitySeafloorBinding.inflate(layoutInflater)
     }
@@ -40,7 +48,7 @@ class SeafloorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
 
-        mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
+        mBinding.fishLayout.setFishData(mutableListOf(petFish,mShell, ShoalFish().apply {
             skinResId = R.mipmap.fish_group_1
         }))
 
@@ -70,6 +78,11 @@ class SeafloorActivity : AppCompatActivity() {
             petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
             petFish.isSpraying = !petFish.isSpraying
             mBinding.fishLayout.notifyDataSetChanged()
+        }
+        mBinding.fishLayout.setOnItemClickListener {
+            if (it.id == R.id.ivAIShell){
+                Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -64,6 +64,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             setOnClickListener(this@SeafloorLayout)
         }
     }
+
     private val tvTips by lazy {
         findViewById<TextView>(R.id.tvTips)
     }
@@ -295,17 +296,25 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (tvTips.visibility != View.VISIBLE) {
-            if (fishEntityList.isNotEmpty() && fishEntityList[0] is PetFish) {
-                (fishEntityList[0] as PetFish).tips()?.let {
-                    tvTips.text = it
+        when (v.id) {
+            R.id.ivFish -> {
+                if (tvTips.visibility != View.VISIBLE) {
+                    if (fishEntityList.isNotEmpty() && fishEntityList[0] is PetFish) {
+                        (fishEntityList[0] as PetFish).tips()?.let {
+                            tvTips.text = it
+                        }
+                    }
+                    tvTips.visibility = View.VISIBLE
+                    postDelayed({
+                        tvTips.visibility = View.GONE
+                    }, 6 * 1000L)
                 }
             }
-            tvTips.visibility = View.VISIBLE
-            postDelayed({
-                tvTips.visibility = View.GONE
-            }, 6 * 1000L)
+            R.id.ivAIShell -> {
+                mOnItemListener?.onClick(v)
+            }
         }
+
     }
 
     private fun onInitAttributeSet(attrs: AttributeSet?) {
@@ -332,8 +341,16 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         fishEntityList.forEachIndexed { _, entity ->
             if (entity is PetFish) {
                 petDrawableHolder = PetDrawableHolder.create(resources, entity)
+                //更换皮肤
+                setPetDrawable()
+            } else if (entity is Shell) {
+                if (entity.shellResId != 0) {
+                    ivAIShell.setImageResource(entity.shellResId)
+                }
+                if (entity.stoneResId != 0) {
+                    ivStone.setImageResource(entity.stoneResId)
+                }
             }
-            ivAIShell.setImageDrawable(GifDrawable(resources,R.mipmap.ic_shell))
             /*else {
                 val fishView =
                     LayoutInflater.from(context).inflate(R.layout.layout_fish_shoal, this, false)
@@ -341,13 +358,12 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                 initAnimation(TYPE_3, height, fishView)
             }*/
         }
-        //更换皮肤
-        setImageDrawable()
+
         resume()
     }
 
     //pet
-    private fun setImageDrawable() {
+    private fun setPetDrawable() {
         petDrawableHolder?.let {
             when (currentIndex) {
                 0, 1, 5, 7, 8, 9, 10, 12 -> {
@@ -395,12 +411,21 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                 petFishAnimator.pause()
             }
         }
+        ivAIShell.drawable?.let {
+            (it as GifDrawable).stop()
+        }
+
     }
 
     fun resume() {
         if (!petPath.isEmpty) {
             if (petFishAnimator.isStarted) {
                 petFishAnimator.resume()
+            }
+        }
+        ivAIShell.drawable?.let {
+            (it as GifDrawable).run {
+                reset()
             }
         }
     }
@@ -641,8 +666,16 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     }
 
     val ivAIShell by lazy {
-        findViewById<ImageView>(R.id.ivAIShell)
+        findViewById<ImageView>(R.id.ivAIShell).also {
+            it.setOnClickListener(this)
+        }
     }
+
+    fun setOnItemClickListener(l: OnClickListener?) {
+        mOnItemListener = l
+    }
+
+    private var mOnItemListener: OnClickListener? = null
 
 }
 
