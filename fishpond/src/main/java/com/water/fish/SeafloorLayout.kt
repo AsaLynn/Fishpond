@@ -155,6 +155,8 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                 }, duration.toLong())
             }
         } else if (isInPointRect(petPointList[3], x, y)) {
+            //it.pause()
+        }else if (isInPointRect(petPointList[4], x, y)) {
             it.pause()
         }
     }
