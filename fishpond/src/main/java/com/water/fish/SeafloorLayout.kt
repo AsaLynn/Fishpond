@@ -41,7 +41,9 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
         private const val TAG = "SeafloorLayout"
 
-        private const val SPEED = 30L
+        private const val SPEED = 30
+
+        private const val SPEED_MOVE_SECOND = 1000L
 
         private const val TYPE_1 = 1 //从左到右 带旋转角度
 
@@ -237,7 +239,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             //自定义从初始值 - 结束值 进行过渡
             //setEvaluator(PetPointEvaluator(petPointList))
             interpolator = LinearInterpolator()
-            duration = SPEED * 1000
+            duration = petFishSpeed * SPEED_MOVE_SECOND
         }
     }
 
@@ -676,6 +678,17 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     }
 
     private var mOnItemListener: OnClickListener? = null
+
+    /**
+     * 设置1000的petFishSpeed速度.
+     */
+    var petFishSpeed = SPEED
+        set(value) {
+            field = value
+            pause()
+            petFishAnimator.duration = field * SPEED_MOVE_SECOND
+            resume()
+        }
 
 }
 

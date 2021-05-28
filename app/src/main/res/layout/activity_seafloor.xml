@@ -15,36 +15,69 @@
 
     <Button
         android:id="@+id/btnOpen"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:text="打开"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnChange"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
     <Button
         android:id="@+id/btnChange"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:text="切换"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/btnOpen"
+        app:layout_constraintRight_toLeftOf="@id/btnSpray"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
     <Button
         android:id="@+id/btnSpray"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:text="喷水"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/btnChange"
+        app:layout_constraintRight_toLeftOf="@id/btnFastA"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnFastA"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="快"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnSpray"
+        app:layout_constraintRight_toLeftOf="@id/btnFastB"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnFastB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="慢"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnFastA"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
 
     <TextView
         android:id="@+id/tvStart"

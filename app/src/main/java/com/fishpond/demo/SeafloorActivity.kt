@@ -84,6 +84,12 @@ class SeafloorActivity : AppCompatActivity() {
                 Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
             }
         }
+        mBinding.btnFastA.setOnClickListener {
+            mBinding.fishLayout.petFishSpeed = 5
+        }
+        mBinding.btnFastB.setOnClickListener {
+            mBinding.fishLayout.petFishSpeed = 200
+        }
     }
 
     override fun onResume() {
