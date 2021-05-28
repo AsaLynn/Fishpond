@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+
+    <com.zxn.titleview.TitleView
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_title_height"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="Fragment"
+        app:titleTextColor="@color/black"
+        app:titleTextSize="@dimen/sp_17" />
+
+    <Button
+        android:id="@+id/btnOpen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="打开"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnChange"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnChange"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="切换"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnOpen"
+        app:layout_constraintRight_toLeftOf="@id/btnSpray"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnSpray"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="喷水"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnChange"
+        app:layout_constraintRight_toLeftOf="@id/btnFastA"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnFastA"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="快"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnSpray"
+        app:layout_constraintRight_toLeftOf="@id/btnFastB"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+    <Button
+        android:id="@+id/btnFastB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="慢"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnFastA"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+
+    <TextView
+        android:id="@+id/tvStart"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center"
+        android:text="开始"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tvPause" />
+
+    <TextView
+        android:id="@+id/tvPause"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center"
+        android:text="暂停"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/tvStart"
+        app:layout_constraintRight_toLeftOf="@id/tvResume" />
+
+    <TextView
+        android:id="@+id/tvResume"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center"
+        android:text="继续"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/tvPause"
+        app:layout_constraintRight_toLeftOf="@id/tvEnd" />
+
+    <TextView
+        android:id="@+id/tvEnd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center"
+        android:text="结束"
+        android:textColor="#00c0c4"
+        android:textSize="@dimen/sp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/tvResume"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.water.fish.SeafloorLayout
+        android:id="@+id/fishLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_120"
+        android:background="#00c0c4"
+        app:layout_constraintBottom_toTopOf="@id/tvStart"
+        app:layout_constraintTop_toBottomOf="@id/titleView"
+        app:paddingPetAreaLeft="@dimen/dp_10"
+        app:waterBottomHeight="@dimen/dp_80" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

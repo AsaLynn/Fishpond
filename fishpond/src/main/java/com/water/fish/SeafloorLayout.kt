@@ -279,11 +279,12 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
         addRoutePoint()
 
-        /*if (isStarted) {
+        if (!isStarted) {
+            isStarted = true
             if (!petFishAnimator.isStarted) {
                 petFishAnimator.start()
             }
-        }*/
+        }
 
 
     }
@@ -402,6 +403,8 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         if (petPointList.isNotEmpty()) {
             invalidate()
             //requestLayout()
+        } else {
+            //isStarted = false
         }
     }
 
