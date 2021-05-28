@@ -1,5 +1,7 @@
 package com.fishpond.demo
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.fishpond.demo.databinding.ActivityMainBinding
@@ -10,6 +12,14 @@ import com.water.fish.ShoalFish
  *
  */
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        @JvmStatic
+        fun jumpTo(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java))
+        }
+    }
+
 
     private val petFish by lazy {
         PetFish().apply {
@@ -35,5 +45,23 @@ class MainActivity : AppCompatActivity() {
         mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
             skinResId = R.mipmap.fish_group_1
         }))
+
     }
+
+    override fun onResume() {
+        super.onResume()
+        mBinding.fishLayout.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBinding.fishLayout.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBinding.fishLayout.end()
+    }
+
+
 }

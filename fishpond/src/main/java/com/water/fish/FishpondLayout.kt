@@ -417,24 +417,6 @@ class FishpondLayout : ViewGroup, View.OnClickListener {
         iv.startAnimation(animationSet)
     }
 
-//    private var mAdapter: FishAdapter? = null
-
-    /*override fun getAdapter(): FishAdapter? = mAdapter
-
-    override fun setAdapter(adapter: FishAdapter) {
-        //mAdapter?.unregisterDataSetObserver(mDataSetObserver)
-        //resetList();
-        mAdapter?.let {
-
-        }
-    }
-
-    override fun getSelectedView(): View ? = null
-
-    override fun setSelection(position: Int) {
-
-    }*/
-
 }
 
 

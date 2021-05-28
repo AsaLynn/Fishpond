@@ -3,12 +3,15 @@
     android:id="@+id/ivFish"
     android:layout_width="@dimen/pet_fish_width"
     android:layout_height="@dimen/pet_fish_height"
-    android:scaleType="fitCenter"
+    android:background="#FFFFFF"
     android:clickable="false"
-    android:focusable="false" />
+    android:focusable="false"
+    android:scaleType="fitCenter" />
 
 
-
+<!--
+android:background="#FFFFFF"
+-->
     <!--
     <?xml version="1.0" encoding="utf-8"?>
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"

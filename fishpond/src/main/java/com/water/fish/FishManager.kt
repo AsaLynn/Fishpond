@@ -91,25 +91,25 @@ class FishManager(private var context: Context?, private var width: Int, private
         return path
     }
 
-    /**
-     * 获取测试路线
-     * @return  Path 路线
-     */
-    private fun getTestPath(): Path {
-        val path = Path()
-        val points: List<Point> = getRandomPoint()
-        path.moveTo(100.0f, 100.0f)
-        //cubicTo（）方法去描述一条三阶贝塞尔曲线
-        path.cubicTo(
-            200f,
-            200f,
-            500f,
-            500f,
-            200f,
-            1000f
-        )
-        return path
-    }
+//    /**
+//     * 获取测试路线
+//     * @return  Path 路线
+//     */
+//    private fun getTestPath(): Path {
+//        val path = Path()
+//        val points: List<Point> = getRandomPoint()
+//        path.moveTo(100.0f, 100.0f)
+//        //cubicTo（）方法去描述一条三阶贝塞尔曲线
+//        path.cubicTo(
+//            200f,
+//            200f,
+//            500f,
+//            500f,
+//            200f,
+//            1000f
+//        )
+//        return path
+//    }
 
     //获取贝塞尔4个随机点
     private fun getRandomPoint(): List<Point> {
@@ -130,12 +130,12 @@ class FishManager(private var context: Context?, private var width: Int, private
      */
     private fun getRandomInt(region: Int, isMinus: Boolean): Int {
         return if (isMinus) {
-            val temp = random!!.nextInt(100)
+            val temp = random.nextInt(100)
             if (temp % 2 == 0) {
-                random!!.nextInt(region)
-            } else -random!!.nextInt(region)
+                random.nextInt(region)
+            } else -random.nextInt(region)
         } else {
-            random!!.nextInt(region)
+            random.nextInt(region)
         }
     }
 

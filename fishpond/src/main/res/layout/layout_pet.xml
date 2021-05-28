@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vgPetView"
+    android:layout_width="@dimen/pet_fish_width"
+    android:layout_height="104dp"
+    android:layout_gravity="bottom|right">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/ivFish"
+        android:layout_width="@dimen/pet_fish_width"
+        android:layout_height="@dimen/pet_fish_height"
+        android:layout_marginTop="28dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/bg_fish_tips"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_5"
+        android:paddingBottom="14dp"
+        android:text="今日喝水建议"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

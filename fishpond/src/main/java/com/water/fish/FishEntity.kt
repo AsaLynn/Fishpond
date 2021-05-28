@@ -47,7 +47,7 @@ sealed class FishEntity {
 
     private val tan = FloatArray(2)
 
-    private val swimPath by lazy {
+    val swimPath by lazy {
 
         createPath().also {
             if (it.isEmpty) {
@@ -106,17 +106,13 @@ sealed class FishEntity {
     /**
      * 获取鱼的游戏路径
      */
-    abstract fun createPath(): Path
+    open fun createPath(): Path = Path()
 
     /**
      * 添加轨迹坐标点.
      */
     fun addPoint(x: Int, y: Int) {
         pointList.add(Point(x, y))
-    }
-
-    fun clearPoint() {
-        pointList.clear()
     }
 
     /**
@@ -161,7 +157,9 @@ sealed class FishEntity {
      * @param y
      * @param distance 距离起点的直线距离.
      */
-    abstract fun onSwimming(x: Float, y: Float, distance: Float, fishView: ImageView)
+    open fun onSwimming(x: Float, y: Float, distance: Float, fishView: ImageView) {
+
+    }
 
 }
 
@@ -239,7 +237,7 @@ class PetFish : FishEntity() {
     /**
      * 开启喷水:true,停止喷水:false.
      */
-    private var isSpraying = false
+    var isSpraying = false
 
     private var onSprayChangeListener: ((value: Int) -> Unit)? = null
 
@@ -370,14 +368,7 @@ class PetFish : FishEntity() {
 
         lastFishStatus = fishStatus
         fishStatus = status
-       /* val w = fishView.resources.getDimension(R.dimen.pet_fish_width).toInt()
-        val h = fishView.resources.getDimension(R.dimen.pet_fish_height).toInt()*/
         when (fishStatus) {
-            /*FishStatus.SPRAY_START, FishStatus.SPRAY_STOP -> {
-                Glide.with(fishView).apply {
-                    this.asGif()
-                }.load(skinResId).override(w, h).into(fishView)
-            }*/
             FishStatus.TURN_LEFT -> {
                 Log.i(TAG, "changeSwimming: 向左转身:$status")
                 skinResId = turnLeftResId
@@ -439,23 +430,26 @@ class PetFish : FishEntity() {
     var isChange = false
 }
 
-
 /**
  * 鱼群,ShoalFish
  */
-class ShoalFish : FishEntity() {
-    override fun createPath(): Path =
-        Path().apply {
-            moveTo(1000f, 1000f)
-            lineTo(100f, 1000f)
-            lineTo(100f, 200f)
-            lineTo(1000f, 200f)
-            lineTo(1000f, 1000f)
-        }
+class ShoalFish : FishEntity()
 
-    override fun onSwimming(x: Float, y: Float, distance: Float, fishView: ImageView) {
+/**
+ * 贝壳
+ */
+class Shell : FishEntity() {
+    /**
+     * 石头ID
+     */
+    var stoneResId: Int = 0
 
-    }
+    /**
+     * 贝壳
+     */
+    var shellResId: Int = 0
+
+
 }
 
 
