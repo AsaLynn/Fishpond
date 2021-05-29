@@ -17,7 +17,7 @@ class EnterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
         mBinding.btnA.setOnClickListener {
-            MainActivity.jumpTo(this)
+            FishpondActivity.jumpTo(this)
         }
         mBinding.btnB.setOnClickListener {
             SeafloorActivity.jumpTo(this)
@@ -25,7 +25,10 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnC.setOnClickListener {
             SeaFragActivity.jumpTo(this)
         }
-        SeaFragActivity.jumpTo(this)
+        mBinding.btnD.setOnClickListener {
+            SeaFragActivity.jumpTo(this)
+        }
+        MainActivity.jumpTo(this)
     }
 
 

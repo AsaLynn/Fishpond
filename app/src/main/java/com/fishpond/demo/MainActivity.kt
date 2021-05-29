@@ -1,67 +1,89 @@
 package com.fishpond.demo
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import com.fishpond.demo.databinding.ActivityMainBinding
-import com.water.fish.PetFish
-import com.water.fish.ShoalFish
+import com.zxn.mvvm.ext.jumpInTo
+import com.zxn.mvvm.view.BaseActivity
+import com.zxn.tablayout.listener.CustomTabEntity
+import com.zxn.tablayout.listener.OnTabSelectListener
 
 /**
- *
+ * 主页
+ *  Created by zxn on 2021/3/24.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     companion object {
+
         @JvmStatic
         fun jumpTo(context: Context) {
-            context.startActivity(Intent(context, MainActivity::class.java))
+            jumpInTo<MainActivity>(context)
         }
     }
 
+    override val layoutResId: Int = R.layout.activity_main
 
-    private val petFish by lazy {
-        PetFish().apply {
-            moveLeftResId = R.mipmap.ic_fish_pet_left_normal
-            moveRightResId = R.mipmap.ic_fish_pet_right_normal
-            turnLeftResId = R.mipmap.ic_fish_pet_left_turn
-            turnRightResId = R.mipmap.ic_fish_pet_right_turn
-            spurtLeftResId = R.mipmap.ic_fish_pet_left_normal_water
-            spurtRightResId = R.mipmap.ic_fish_pet_right_normal_water
-        }
+    override val layoutRoot: View by lazy {
+        mViewBinding.root
     }
 
-    private val mBinding by lazy {
+    private val mViewBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
-        setContentView(mBinding.root)
-        //mBinding.fishLayout.setFishData(mutableListOf(petFish))
-        mBinding.fishLayout.setFishData(mutableListOf(petFish, ShoalFish().apply {
-            skinResId = R.mipmap.fish_group_1
-        }))
+    override fun createObserver() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        mBinding.fishLayout.resume()
+    private var tabIndex = 0 //默认为0
+
+    override fun onInitView() {
+
+        mViewBinding.ctlMenu.setTabData(
+            mutableListOf<CustomTabEntity>(
+                TabEntity("饮水", ""),
+                TabEntity("健康", ""),
+                TabEntity("我的", "")
+            ),
+            (this@MainActivity as FragmentActivity),
+            R.id.flContainer,
+            mutableListOf(
+                SeaFragment.newInstance(),
+                BlankAFragment.newInstance(),
+                BlankBFragment.newInstance(),
+            )
+        )
+
+        /**
+         * 监听tab
+         */
+        mViewBinding.ctlMenu.setOnTabSelectListener(object : OnTabSelectListener {
+
+            override fun onTabSelect(position: Int) {
+                Log.d("MainActivity", "onTabSelect${position}")
+                if (position == 1) {
+                } else {
+                    tabIndex = position
+                }
+            }
+
+            override fun onTabReselect(position: Int) {
+                //再次选择
+                Log.d("MainActivity", "onTabReselect${position}")
+            }
+        })
+
     }
 
-    override fun onPause() {
-        super.onPause()
-        mBinding.fishLayout.pause()
+
+    override fun registerEventBus(isRegister: Boolean) {
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mBinding.fishLayout.end()
-    }
+    fun currentTab(): Int = mViewBinding.ctlMenu.currentTab
 
 
 }

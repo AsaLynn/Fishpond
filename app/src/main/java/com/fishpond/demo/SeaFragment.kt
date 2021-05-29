@@ -51,7 +51,6 @@ class SeaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
          mBinding = FragmentSeaFragmetBinding.inflate(inflater, container, false)
-        //return inflater.inflate(R.layout.fragment_sea_fragmet, container, false)
         return mBinding.root
     }
 
@@ -71,12 +70,4 @@ class SeaFragment : Fragment() {
         mBinding.fishLayout.start()
 
     }
-
-    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        mBinding.fishLayout.setFishData(mutableListOf(petFish, mShell, ShoalFish().apply {
-            skinResId = R.mipmap.fish_group_1
-        }))
-        mBinding.fishLayout.start()
-    }*/
 }

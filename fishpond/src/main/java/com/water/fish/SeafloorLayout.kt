@@ -41,7 +41,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
         private const val TAG = "SeafloorLayout"
 
-        private const val SPEED = 80
+        private const val SPEED = 70
 
         private const val SPEED_MOVE_SECOND = 1000L
 
