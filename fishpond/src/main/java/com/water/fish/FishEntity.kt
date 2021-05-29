@@ -216,11 +216,6 @@ class PetFish : FishEntity() {
         if (isSpraying != isEnabled) {
             isSpraying = isEnabled
             isChange = true
-            /*if (fishStatus == FishStatus.MOVE_LEFT || fishStatus == FishStatus.MOVE_TOP_LEFT || fishStatus == FishStatus.MOVE_BOTTOM_LEFT) {
-                skinResId = field
-                isChange = true
-                onSprayChangeListener?.invoke(skinResId)
-            }*/
         }
     }
 

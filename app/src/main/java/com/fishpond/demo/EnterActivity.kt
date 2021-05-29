@@ -28,7 +28,7 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnD.setOnClickListener {
             SeaFragActivity.jumpTo(this)
         }
-        MainActivity.jumpTo(this)
+        SeafloorActivity.jumpTo(this)
     }
 
 

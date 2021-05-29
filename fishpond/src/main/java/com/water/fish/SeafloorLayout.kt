@@ -41,7 +41,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
         private const val TAG = "SeafloorLayout"
 
-        private const val SPEED = 70
+        private const val SPEED = 60
 
         private const val SPEED_MOVE_SECOND = 1000L
 
@@ -145,7 +145,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                 currentIndex = 1
                 postDelayed({
                     it.resume()
-                }, turnDuration)
+                }, restDuration)
             }
             isInPointRect(2, x, y) -> {
                 it.pause()
@@ -201,10 +201,9 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             isInPointRect(8, x, y) -> {
                 it.pause()
                 currentIndex = 8
-                val duration = 1000L
                 postDelayed({
                     it.resume()
-                }, duration)
+                }, restDuration)
             }
             isInPointRect(9, x, y) -> {
                 currentIndex = 9
@@ -250,7 +249,10 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     /**
      * 转身持续时间.turnDuration
      */
-    private val turnDuration = 40L
+    private val turnDuration = 60L
+
+    var restDuration = 2 * 1000L
+
 
     constructor(context: Context) : this(context, null)
 
@@ -276,17 +278,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         if (fishPetAreaH <= 0) {
             fishPetAreaH = height
         }
-
         addRoutePoint()
-
-        if (!isStarted) {
-            isStarted = true
-            if (!petFishAnimator.isStarted) {
-                petFishAnimator.start()
-            }
-        }
-
-
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -295,6 +287,22 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             if (!petFishAnimator.isStarted) {
                 petFishAnimator.start()
             }
+        }
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+        if (hasWindowFocus) {
+            if (isStarted) {
+                if (!petPath.isEmpty) {
+                    if (!petFishAnimator.isStarted) {
+                        petFishAnimator.start()
+                    }
+                }
+            }
+            resume()
+        } else {
+            pause()
         }
     }
 
@@ -400,19 +408,11 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     fun start() {
         isStarted = true
         isEnd = false
-        if (petPointList.isNotEmpty()) {
-            invalidate()
-            //requestLayout()
-        } else {
-            //isStarted = false
-        }
     }
 
     fun pause() {
         if (!petPath.isEmpty) {
-            if (!petFishAnimator.isStarted) {
-                petFishAnimator.start()
-            } else {
+            if (!petFishAnimator.isPaused) {
                 petFishAnimator.pause()
             }
         }
@@ -425,7 +425,10 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     fun resume() {
         if (!petPath.isEmpty) {
             if (petFishAnimator.isStarted) {
-                petFishAnimator.resume()
+                isEnd = false
+                if (petFishAnimator.isRunning) {
+                    petFishAnimator.resume()
+                }
             }
         }
         ivAIShell.drawable?.let {
@@ -436,6 +439,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     }
 
     fun end() {
+        isStarted = false
         isEnd = true
         if (!petPath.isEmpty) {
             petFishAnimator.end()
@@ -609,19 +613,11 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
 
     private fun isInPointRect(index: Int, x: Float, y: Float): Boolean {
-        /*val point = petPointList[index]
-        if (index == 5 && currentIndex > 3) {
-            return abs(point.y - (y + 0.5F).toInt()) < 10
-        } else {
-            return abs(point.x - (x + 0.5F).toInt()) < 10
-                    && abs(point.y - (y + 0.5F).toInt()) < 10
-                    && (index - currentIndex) == 1
-        }*/
 
         if (petPointList.isEmpty()) return false
 
         val point = petPointList[index]
-        return abs(point.x - (x + 0.5F).toInt()) < 10
+        return abs(point.x - (x + 0.5F).toInt()) < 5
                 && abs(point.y - (y + 0.5F).toInt()) < 10
                 && (index - currentIndex) == 1
     }
@@ -692,6 +688,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             petFishAnimator.duration = field * SPEED_MOVE_SECOND
             resume()
         }
+
 
 }
 
