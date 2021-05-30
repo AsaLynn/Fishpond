@@ -1,10 +1,13 @@
-package com.fishpond.demo
+package com.fishpond.demo.activity
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.fishpond.demo.databinding.ActivityEnterBinding.inflate
+import com.fishpond.demo.fragment.BlankAFragment
+import com.fishpond.demo.fragment.BlankBFragment
+import com.fishpond.demo.fragment.SeaFragment
 
 class SeaFragActivity : AppCompatActivity() {
 

@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Fishpond">
-        <activity android:name=".SeaFragActivity"></activity>
-        <activity android:name=".DemoActivity" />
-        <activity android:name=".SeafloorActivity" />
+        <activity android:name=".activity.SeaActivity" />
+        <activity android:name=".activity.SeaFragActivity" />
+        <activity android:name=".activity.DemoActivity" />
+        <activity android:name=".activity.SeafloorActivity" />
         <activity android:name=".EnterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FishpondActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.FishpondActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.SeawaterActivity" />
+        <activity android:name=".activity.BlueWaterActivity" />
     </application>
 
 </manifest>

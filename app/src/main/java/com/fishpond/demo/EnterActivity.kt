@@ -2,6 +2,7 @@ package com.fishpond.demo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.fishpond.demo.activity.*
 import com.fishpond.demo.databinding.ActivityEnterBinding
 
 /**
@@ -23,12 +24,12 @@ class EnterActivity : AppCompatActivity() {
             SeafloorActivity.jumpTo(this)
         }
         mBinding.btnC.setOnClickListener {
-            SeaFragActivity.jumpTo(this)
+            SeaActivity.jumpTo(this)
         }
         mBinding.btnD.setOnClickListener {
-            SeaFragActivity.jumpTo(this)
+            BlueWaterActivity.jumpTo(this)
         }
-        SeafloorActivity.jumpTo(this)
+        BlueWaterActivity.jumpTo(this)
     }
 
 

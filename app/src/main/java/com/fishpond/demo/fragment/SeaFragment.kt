@@ -1,10 +1,11 @@
-package com.fishpond.demo
+package com.fishpond.demo.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.fishpond.demo.R
 import com.fishpond.demo.databinding.FragmentSeaFragmetBinding
 import com.water.fish.PetFish
 import com.water.fish.Shell

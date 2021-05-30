@@ -239,19 +239,6 @@ class FishManager(private var context: Context?, private var width: Int, private
         return points
     }
 
-//    //将鱼的图片切割出来
-//    fun getFishAnim(): AnimationDrawable {
-//        val fishBit = BitmapFactory.decodeResource(context!!.resources, R.mipmap.fishs)
-//        fishWidth = fishBit.width / 7
-//        fishHeight = fishBit.height
-//        val anim = AnimationDrawable()
-//        for (i in 0..6) {
-//            val btmap = Bitmap.createBitmap(fishBit, i * fishWidth, 0, fishWidth, fishHeight)
-//            val d: Drawable = BitmapDrawable(context!!.resources, btmap)
-//            anim.addFrame(d, FRAME_INTERVAL)
-//        }
-//        anim.isOneShot = false
-//        return anim
-//    }
+
 
 }

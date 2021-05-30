@@ -1,10 +1,11 @@
-package com.fishpond.demo
+package com.fishpond.demo.activity
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.fishpond.demo.R
 import com.fishpond.demo.databinding.ActivitySeafloorBinding
 import com.water.fish.PetFish
 import com.water.fish.Shell
@@ -85,10 +86,10 @@ class SeafloorActivity : AppCompatActivity() {
             }
         }
         mBinding.btnFastA.setOnClickListener {
-            mBinding.fishLayout.petFishSpeed = 5
+            mBinding.fishLayout.petFishSpeed = 10
         }
         mBinding.btnFastB.setOnClickListener {
-            mBinding.fishLayout.petFishSpeed = 200
+            mBinding.fishLayout.petFishSpeed = 50
         }
     }
 

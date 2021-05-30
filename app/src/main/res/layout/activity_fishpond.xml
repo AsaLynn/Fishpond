@@ -19,8 +19,8 @@
         android:layout_height="@dimen/dp_title_height"
         android:layout_marginTop="@dimen/dp_35"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="饮水"
-        app:titleTextColor="@color/white"
+        app:titleText="FishpondLayout"
+        app:titleTextColor="@color/black"
         app:titleTextSize="@dimen/sp_17" />
 
     <ImageView
@@ -111,7 +111,7 @@
         android:id="@+id/fishLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_120"
+        android:layout_marginTop="@dimen/dp_80"
         app:layout_constraintBottom_toTopOf="@id/rvCategory"
         app:layout_constraintTop_toBottomOf="@id/titleView"
         app:paddingPetAreaLeft="@dimen/dp_80"

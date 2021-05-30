@@ -1,4 +1,4 @@
-package com.water.fish
+package com.water.fish.evaluator
 
 import android.animation.TypeEvaluator
 import android.graphics.Point

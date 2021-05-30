@@ -3,7 +3,6 @@
     android:id="@+id/ivFish"
     android:layout_width="@dimen/pet_fish_width"
     android:layout_height="@dimen/pet_fish_height"
-    android:background="#FFFFFF"
     android:clickable="false"
     android:focusable="false"
     android:scaleType="fitCenter" />

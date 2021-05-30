@@ -3,8 +3,8 @@ package com.water.fish
 import android.animation.*
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Canvas
 import android.graphics.Path
+import android.graphics.PathMeasure
 import android.graphics.Point
 import android.util.AttributeSet
 import android.util.Log
@@ -14,35 +14,25 @@ import android.view.animation.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.water.fish.holder.PetDrawableHolder
-import com.zxn.popup.EasyPopup
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
-
 /**
- *  海底布局.
- *  采用ObjectAnimator+View位移+Path
- *  参考资料:
- *  https://www.jianshu.com/p/036aecb64093
- *  https://blog.csdn.net/Jiang_Rong_Tao/article/details/58635019?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_baidulandingword-0&spm=1001.2101.3001.4242
- *  Created by zxn on 2021/5/26.
- *  后续增加估值器的用法.
- *  https://blog.csdn.net/carson_ho/article/details/99284218
- *  https://github.com/koral--/android-gif-drawable
- *  https://www.javadoc.io/doc/pl.droidsonroids.gif/android-gif-drawable
+ *  速度加快会出倒游问题,推荐指数不高.
+ *  采用ValueAnimator+View位移+Path
+ *  https://www.jianshu.com/p/b6a5b20cf3b9
  **/
-class SeafloorLayout : FrameLayout, View.OnClickListener {
+class SeaLayout : FrameLayout, View.OnClickListener {
 
     companion object {
 
-        private const val TAG = "SeafloorLayout"
+        private const val TAG = "SeaLayout"
 
-        private const val SPEED = 60
+        private const val SPEED = 40
 
         private const val SPEED_MOVE_SECOND = 1000L
 
@@ -62,9 +52,130 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     private val petPath = Path()
 
+    private val petPathMeasure = PathMeasure()
+
+    private val petPathLengthArray = FloatArray(13)
+
+    private val petValueAnimator by lazy {
+        ValueAnimator.ofFloat(
+            petPathLengthArray[0],
+            petPathLengthArray[1],
+            petPathLengthArray[2],
+            petPathLengthArray[3],
+            petPathLengthArray[4],
+            petPathLengthArray[5],
+            petPathLengthArray[6],
+            petPathLengthArray[7],
+            petPathLengthArray[8],
+            petPathLengthArray[9],
+            petPathLengthArray[10],
+            petPathLengthArray[11],
+            petPathLengthArray[12],
+        ).apply {
+            addListener(petValueAnimatorListener)
+            addUpdateListener(petUpdateListener)
+            interpolator = LinearInterpolator()
+            duration = petFishSpeed * SPEED_MOVE_SECOND
+        }
+    }
+
+    private val petPosArray = FloatArray(2)
+
+    private val petUpdateListener = ValueAnimator.AnimatorUpdateListener {
+        val value = (it.animatedValue as Float)
+        petPathMeasure.getPosTan(value,petPosArray,null)
+        vgPetView.x = petPosArray[0]
+        vgPetView.y = petPosArray[1]
+        Log.i(TAG, "addUpdateListener:(value:$value")
+        //Log.i(TAG, "addUpdateListener:(x:$x,y:$y) ")
+        when(value.toInt()) {
+            petPathLengthArray[1].toInt() -> {
+                it.pause()
+                currentIndex = 1
+                postDelayed({
+                    it.resume()
+                }, restDuration)
+            }
+            petPathLengthArray[2].toInt() -> {
+                it.pause()
+                currentIndex = 2
+                petDrawableHolder?.let { holder ->
+                    ivPetFish.setImageDrawable(holder.turnRightDrawable)
+                    postDelayed({
+                        it.resume()
+                        ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
+                    }, turnDuration)
+                }
+            }
+            petPathLengthArray[3].toInt() -> {
+                currentIndex = 3
+            }
+            petPathLengthArray[4].toInt() -> {
+                currentIndex = 4
+            }
+            petPathLengthArray[5].toInt() -> {
+                it.pause()
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+                currentIndex = 5
+                postDelayed({
+                    it.resume()
+                    petDrawableHolder?.run {
+                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
+                    }
+                }, turnDuration)
+            }
+            petPathLengthArray[6].toInt() -> {
+                it.pause()
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+                currentIndex = 6
+                postDelayed({
+                    it.resume()
+                    petDrawableHolder?.run {
+                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
+                    }
+                }, turnDuration)
+            }
+            petPathLengthArray[7].toInt() -> {
+                it.pause()
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+                currentIndex = 7
+                postDelayed({
+                    it.resume()
+                    petDrawableHolder?.run {
+                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
+                    }
+                }, turnDuration)
+            }
+            petPathLengthArray[8].toInt() -> {
+                it.pause()
+                currentIndex = 8
+                postDelayed({
+                    it.resume()
+                }, restDuration)
+            }
+            petPathLengthArray[9].toInt() -> {
+                currentIndex = 9
+            }
+            petPathLengthArray[10].toInt() -> {
+                currentIndex = 10
+            }
+            petPathLengthArray[11].toInt() -> {
+                it.pause()
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+                currentIndex = 11
+                postDelayed({
+                    it.resume()
+                    petDrawableHolder?.run {
+                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
+                    }
+                }, turnDuration)
+            }
+        }
+    }
+
     private val ivPetFish: GifImageView by lazy {
         findViewById<GifImageView>(R.id.ivFish).apply {
-            setOnClickListener(this@SeafloorLayout)
+            setOnClickListener(this@SeaLayout)
         }
     }
 
@@ -95,21 +206,21 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
      */
     private var paddingPetAreaLeft = 0
 
-    private val mTipsPop: EasyPopup by lazy {
-        EasyPopup.create()
-            .setContentView(context, R.layout.layout_fish_tips)
-            .setFocusAndOutsideEnable(false)
-            .setAnchorView(ivPetFish)
-            .setNeedReMeasureWH(true)
-            .apply()
-    }
+//    private val mTipsPop: EasyPopup by lazy {
+//        EasyPopup.create()
+//            .setContentView(context, R.layout.layout_fish_tips)
+//            .setFocusAndOutsideEnable(false)
+//            .setAnchorView(ivPetFish)
+//            .setNeedReMeasureWH(true)
+//            .apply()
+//    }
 
     /**
      * 停止动画标识.
      */
     private var isEnd = false
 
-    private val petFishAnimatorListener = object : Animator.AnimatorListener {
+    private val petValueAnimatorListener = object : Animator.AnimatorListener {
 
         override fun onAnimationStart(animation: Animator) {
             currentIndex = 0
@@ -136,112 +247,10 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     }
 
-    private val petFishUpdateListener = ValueAnimator.AnimatorUpdateListener {
-        val x = it.getAnimatedValue(it.values[0].propertyName).toString().toFloat()
-        val y = it.getAnimatedValue(it.values[1].propertyName).toString().toFloat()
-        Log.i(TAG, "addUpdateListener:(x:$x,y:$y) ")
-        when {
-            isInPointRect(1, x, y) -> {
-                it.pause()
-                currentIndex = 1
-                postDelayed({
-                    it.resume()
-                }, restDuration)
-            }
-            isInPointRect(2, x, y) -> {
-                it.pause()
-                currentIndex = 2
-                petDrawableHolder?.let { holder ->
-                    ivPetFish.setImageDrawable(holder.turnRightDrawable)
-                    postDelayed({
-                        it.resume()
-                        ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
-                    }, turnDuration)
-                }
-
-            }
-            isInPointRect(3, x, y) -> {
-                currentIndex = 3
-            }
-            isInPointRect(4, x, y) -> {
-                currentIndex = 4
-            }
-            isInPointRect(5, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
-                currentIndex = 5
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(6, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
-                currentIndex = 6
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(7, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
-                currentIndex = 7
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(8, x, y) -> {
-                it.pause()
-                currentIndex = 8
-                postDelayed({
-                    it.resume()
-                }, restDuration)
-            }
-            isInPointRect(9, x, y) -> {
-                currentIndex = 9
-            }
-            isInPointRect(10, x, y) -> {
-                currentIndex = 10
-            }
-            isInPointRect(11, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
-                currentIndex = 11
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
-                    }
-                }, turnDuration)
-            }
-        }
-    }
-
     /**
      * 当前移动的关键坐标点索引.
      */
     private var currentIndex: Int = 0
-
-    private val petFishAnimator by lazy {
-        //vgPetView,ivPetFish
-        ObjectAnimator.ofFloat(vgPetView, View.X, View.Y, petPath).apply {
-            addListener(petFishAnimatorListener)
-            addUpdateListener(petFishUpdateListener)
-            //自定义从初始值 - 结束值 进行过渡
-            //setEvaluator(PetPointEvaluator(petPointList))
-            interpolator = LinearInterpolator()
-            duration = petFishSpeed * SPEED_MOVE_SECOND
-        }
-    }
 
     private var isStarted = false
 
@@ -287,8 +296,8 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         if (hasWindowFocus) {
             if (isStarted) {
                 if (!petPath.isEmpty) {
-                    if (!petFishAnimator.isStarted) {
-                        petFishAnimator.start()
+                    if (!petValueAnimator.isStarted) {
+                        petValueAnimator.start()
                     }
                 }
             }
@@ -354,12 +363,6 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                     ivStone.setImageResource(entity.stoneResId)
                 }
             }
-            /*else {
-                val fishView =
-                    LayoutInflater.from(context).inflate(R.layout.layout_fish_shoal, this, false)
-                addView(fishView)
-                initAnimation(TYPE_3, height, fishView)
-            }*/
         }
 
         resume()
@@ -404,8 +407,8 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     fun pause() {
         if (!petPath.isEmpty) {
-            if (!petFishAnimator.isPaused) {
-                petFishAnimator.pause()
+            if (!petValueAnimator.isPaused) {
+                petValueAnimator.pause()
             }
         }
         ivAIShell.drawable?.let {
@@ -416,10 +419,10 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     fun resume() {
         if (!petPath.isEmpty) {
-            if (petFishAnimator.isStarted) {
+            if (petValueAnimator.isStarted) {
                 isEnd = false
-                if (petFishAnimator.isRunning) {
-                    petFishAnimator.resume()
+                if (petValueAnimator.isRunning) {
+                    petValueAnimator.resume()
                 }
             }
         }
@@ -434,7 +437,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         isStarted = false
         isEnd = true
         if (!petPath.isEmpty) {
-            petFishAnimator.end()
+            petValueAnimator.end()
         }
     }
 
@@ -519,20 +522,21 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
     private fun addRoutePoint() {
         //计算路线的坐标点
         //坐标点已经装载,则不再进行装载.
-
-        val topMargin = (ivPetFish.layoutParams as ConstraintLayout.LayoutParams).topMargin
-        val fishWidth = ivPetFish.layoutParams.width
+        //val topMargin = (ivPetFish.layoutParams as ConstraintLayout.LayoutParams).topMargin
         //val fishHeight = ivPetFish.layoutParams.height + topMargin
+        val fishWidth = ivPetFish.layoutParams.width
         val fishHeight = vgPetView.layoutParams.height
         petPath.reset()
         petPointList.clear()
         if (petPath.isEmpty) {
+
             //P0
             val x0 = mWidth - fishWidth
             val y0 = height - fishHeight
-            Log.i(TAG, "addRoutePoint: x0:$x0,y0:$y0")
             petPointList.add(Point(x0, y0))
             petPath.moveTo(x0.toFloat(), y0.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[0] = petPathMeasure.length
 
             //P1
             val x1 =
@@ -540,42 +544,58 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             val y1 = fishPetAreaH / 2
             petPointList.add(Point(x1, y1))
             petPath.lineTo(x1.toFloat(), y1.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[1] = petPathMeasure.length
 
             //P2
             val x2 = paddingLeft + paddingPetAreaLeft
             val y2 = fishPetAreaH / 2
             petPointList.add(Point(x2, y2))
             petPath.lineTo(x2.toFloat(), y2.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[2] = petPathMeasure.length
 
             //P3
             val x3 = mWidth - fishWidth
             val y3 = fishHeight / 2
             petPointList.add(Point(x3, y3))
             petPath.lineTo(x3.toFloat(), y3.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[3] = petPathMeasure.length
 
             //P4
             val x4 = mWidth - fishWidth
             val y4 = fishPetAreaH / 2
             petPointList.add(Point(x4, y4))
             petPath.lineTo(x4.toFloat(), y4.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[4] = petPathMeasure.length
 
             //P5
             petPointList.add(Point(x3, y3))
             petPath.lineTo(x3.toFloat(), y3.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[5] = petPathMeasure.length
 
             //P6
             val x6 = paddingLeft + paddingPetAreaLeft
             val y6 = fishHeight / 2
             petPointList.add(Point(x6, y6))
             petPath.lineTo(x6.toFloat(), y6.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[6] = petPathMeasure.length
 
             //P7
             petPointList.add(Point(x4, y4))
             petPath.lineTo(x4.toFloat(), y4.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[7] = petPathMeasure.length
 
             //P8
             petPointList.add(Point(x1, y1))
             petPath.lineTo(x1.toFloat(), y1.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[8] = petPathMeasure.length
 
             //P9
             val x9 = paddingLeft + paddingPetAreaLeft
@@ -583,26 +603,33 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             val y9 = height - fishHeight
             petPointList.add(Point(x9, y9))
             petPath.lineTo(x9.toFloat(), y9.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[9] = petPathMeasure.length
 
             //P10
             petPointList.add(Point(x2, y2))
             petPath.lineTo(x2.toFloat(), y2.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[10] = petPathMeasure.length
 
             //P11
             //t.addPoint(x9, y9)
             petPointList.add(Point(x9, y9))
             petPath.lineTo(x9.toFloat(), y9.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[11] = petPathMeasure.length
 
             //P12
             petPointList.add(Point(x0, y0))
             petPath.lineTo(x0.toFloat(), y0.toFloat())
+            petPathMeasure.setPath(petPath, false)
+            petPathLengthArray[12] = petPathMeasure.length
+            for (item in petPathLengthArray) {
+                Log.i(TAG, "addRoutePoint: $item")
+            }
+
         }
     }
-
-    private fun isInPointRect(point: Point, x: Float, y: Float): Boolean =
-        abs(point.x - (x + 0.5F).toInt()) < 10
-                && abs(point.y - (y + 0.5F).toInt()) < 10
-
 
     private fun isInPointRect(index: Int, x: Float, y: Float): Boolean {
 
@@ -677,7 +704,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         set(value) {
             field = value
             pause()
-            petFishAnimator.duration = field * SPEED_MOVE_SECOND
+            petValueAnimator.duration = field * SPEED_MOVE_SECOND
             resume()
         }
 

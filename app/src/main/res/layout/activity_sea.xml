@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_title_height"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleText="SeafloorLayout"
+        app:titleText="SeaLayout"
         app:titleTextColor="@color/black"
         app:titleTextSize="@dimen/sp_17" />
 
@@ -131,7 +131,7 @@
         app:layout_constraintLeft_toRightOf="@id/tvResume"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <com.water.fish.SeafloorLayout
+    <com.water.fish.SeaLayout
         android:id="@+id/fishLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -22,6 +22,8 @@ import kotlin.collections.ArrayList
 
 /**
  *  鱼塘布局.
+ *  速度加快会出倒游问题,推荐指数不高.
+ *  采用ObjectAnimator+ViewGroup的onLayout+Path
  *  Created by zxn on 2021/3/29.
  **/
 class FishpondLayout : ViewGroup, View.OnClickListener {

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案一"
+        android:text="方案1"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案二"
+        android:text="方案2"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnA" />
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案三"
+        android:text="方案3"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnB" />
@@ -46,7 +46,7 @@
         android:text="方案4"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
-        app:layout_constraintTop_toBottomOf="@id/btnB" />
+        app:layout_constraintTop_toBottomOf="@id/btnC" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

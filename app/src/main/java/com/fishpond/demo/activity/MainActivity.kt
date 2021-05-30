@@ -1,10 +1,14 @@
-package com.fishpond.demo
+package com.fishpond.demo.activity
 
 import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.fishpond.demo.*
 import com.fishpond.demo.databinding.ActivityMainBinding
+import com.fishpond.demo.fragment.BlankAFragment
+import com.fishpond.demo.fragment.BlankBFragment
+import com.fishpond.demo.fragment.SeaFragment
 import com.zxn.mvvm.ext.jumpInTo
 import com.zxn.mvvm.view.BaseActivity
 import com.zxn.tablayout.listener.CustomTabEntity
