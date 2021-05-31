@@ -47,6 +47,16 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnC" />
+    <Button
+        android:id="@+id/btnE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/colorPrimaryDark"
+        android:text="方案5"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintTop_toBottomOf="@id/btnC" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,6 @@ import android.animation.*
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Path
-import android.graphics.Point
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,13 +14,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.water.fish.holder.PetDrawableHolder
 import com.water.fish.listener.PetAnimatorListener
-import com.water.fish.listener.PetUpdateListener
 import com.zxn.popup.EasyPopup
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.abs
 
 
 /**
@@ -37,7 +34,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
 
         private const val TAG = "BlueWaterLayout"
 
-        private const val SPEED = 5
+        private const val SPEED = 4
 
         private const val SPEED_MOVE_SECOND = 1000L
 
@@ -119,34 +116,6 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
      */
     private var isEnd = false
 
-    private val petFishAnimatorListener = object : Animator.AnimatorListener {
-
-        override fun onAnimationStart(animation: Animator) {
-            currentIndex = 0
-            petDrawableHolder?.let {
-                ivPetFish.setImageDrawable(if (it.isSpraying) it.spurtLeftDrawable else it.moveLeftDrawable)
-            }
-        }
-
-        override fun onAnimationEnd(animation: Animator) {
-            if (!isEnd) {
-                currentIndex = 12
-                animation.startDelay = 200L
-                animation.start()
-            }
-        }
-
-        override fun onAnimationCancel(animation: Animator) {
-
-        }
-
-        override fun onAnimationRepeat(animation: Animator) {
-
-        }
-
-    }
-
-
 
     /**
      * 当前移动的关键坐标点索引.
@@ -157,18 +126,25 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     private val petObjectAnimatorList = mutableListOf<Animator>()
 
 
-//    private val petAnimatorSet = AnimatorSet()
+    private val petAnimatorSet = AnimatorSet().apply {
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                Log.i(TAG, "onAnimationStart: ")
+            }
+        })
+    }
 
     private var isStarted = false
-
-//    private val petPointList = mutableListOf<Point>()
 
     /**
      * 转身持续时间.turnDuration
      */
-    private val turnDuration = 60L
+    val turnDuration = 60L
 
-    var restDuration = 2 * 1000L
+    /**
+     * 休息的秒数
+     */
+    var restDuration = 2
 
 
     constructor(context: Context) : this(context, null)
@@ -205,12 +181,37 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         if (hasWindowFocus) {
             if (isStarted) {
                 if (petPathList.isNotEmpty()) {
-                    /*if (!petAnimatorSet.isStarted) {
+                    if (!petAnimatorSet.isStarted) {
+
+                        petAnimatorSet.duration = 4 * 1000L
+
                         //petAnimatorSet.playSequentially(petObjectAnimatorList)
-                        petAnimatorSet.play(petObjectAnimatorList[0])
+
+                        petAnimatorSet.play(petObjectAnimatorList[1])
+                            .after(restDuration * SPEED_MOVE_SECOND)
+                            .after(petObjectAnimatorList[0])
+
+                        petAnimatorSet.play(petObjectAnimatorList[2])
+                            .after(petObjectAnimatorList[1])
+
+                        petAnimatorSet.play(petObjectAnimatorList[3]).after(turnDuration)
+                            .after(petObjectAnimatorList[2])
+
+                        petAnimatorSet.play(petObjectAnimatorList[4]).after(turnDuration)
+                            .after(petObjectAnimatorList[3])
+
+                        petAnimatorSet.play(petObjectAnimatorList[5]).after(turnDuration)
+                            .after(petObjectAnimatorList[4])
+
+                        petAnimatorSet.play(petObjectAnimatorList[6])
+                            .after(restDuration * SPEED_MOVE_SECOND)
+                            .after(petObjectAnimatorList[5])
+
+                        petAnimatorSet.play(petObjectAnimatorList[7]).after(turnDuration)
+                            .after(petObjectAnimatorList[6])
+
                         petAnimatorSet.start()
-                    }*/
-                    petObjectAnimatorList[0].start()
+                    }
                 }
             }
             resume()
@@ -299,10 +300,10 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     private fun setPetDrawable() {
         petDrawableHolder?.let {
             when (currentIndex) {
-                0, 1, 5, 7, 8, 9, 10, 12 -> {
+                0, 1, 3, 5, 6 -> {
                     ivPetFish.setImageDrawable(it.toLeftDrawable())
                 }
-                2, 3, 4, 6, 11 -> {
+                2, 4, 7 -> {
                     ivPetFish.setImageDrawable(it.toRightDrawable())
                 }
             }
@@ -332,10 +333,16 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         isEnd = false
     }
 
+    fun restart() {
+        isStarted = true
+        isEnd = false
+        petAnimatorSet.start()
+    }
+
     fun pause() {
-        /*if (!petAnimatorSet.isPaused) {
+        if (!petAnimatorSet.isPaused) {
             petAnimatorSet.pause()
-        }*/
+        }
         ivAIShell.drawable?.let {
             (it as GifDrawable).stop()
         }
@@ -343,12 +350,12 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     }
 
     fun resume() {
-        /*if (petAnimatorSet.isStarted) {
+        if (petAnimatorSet.isStarted) {
             isEnd = false
             if (petAnimatorSet.isRunning) {
                 petAnimatorSet.resume()
             }
-        }*/
+        }
         ivAIShell.drawable?.let {
             (it as GifDrawable).run {
                 reset()
@@ -359,7 +366,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     fun end() {
         isStarted = false
         isEnd = true
-//        petFishAnimator.end()
+        petAnimatorSet.end()
     }
 
     private fun initAnimation(type: Int, height: Int, iv: View) {
@@ -468,8 +475,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         val x2 = paddingLeft + paddingPetAreaLeft
         val y2 = fishPetAreaH / 2
         petPathList[1].lineTo(x2.toFloat(), y2.toFloat())
-        petPathList[2].reset()
-        petPathList[2].moveTo(x2.toFloat(), x2.toFloat())
+        petPathList[2].moveTo(x2.toFloat(), y2.toFloat())
 
         //P3
         val x3 = mWidth - fishWidth
@@ -522,26 +528,18 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
                 petObjectAnimatorList.add(
                     ObjectAnimator.ofFloat(vgPetView, View.X, View.Y, path).apply {
                         addListener(PetAnimatorListener(index, this@BlueWaterLayout))
-                        addUpdateListener(PetUpdateListener(index, this@BlueWaterLayout))
+                        /*addUpdateListener(PetUpdateListener(index, this@BlueWaterLayout))
                         interpolator = LinearInterpolator()
                         duration = when (index) {
                             0 -> petFishSpeed * SPEED_MOVE_SECOND
                             1 -> 4 * SPEED_MOVE_SECOND
                             2 -> 15 * SPEED_MOVE_SECOND
                             else -> petFishSpeed * SPEED_MOVE_SECOND
-                        }
+                        }*/
                     })
             }
         }
     }
-
-    private fun isInPointRect(point: Point, x: Float, y: Float): Boolean =
-        abs(point.x - (x + 0.5F).toInt()) < 10
-                && abs(point.y - (y + 0.5F).toInt()) < 10
-
-
-    private fun isInPointRect(index: Int, x: Float, y: Float): Boolean = false
-
 
     fun testPathAnimator() {
         val path = Path().apply {
@@ -596,7 +594,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         mOnItemListener = l
     }
 
-    fun onPetAnimationStart(index: Int, animation: Animator) {
+    fun onPetAnimationStart(index: Int) {
         when (index) {
             0 -> {
                 currentIndex = 0
@@ -604,139 +602,89 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
                     ivPetFish.setImageDrawable(if (it.isSpraying) it.spurtLeftDrawable else it.moveLeftDrawable)
                 }
             }
-            1 -> {
-
-            }
             2 -> {
                 petDrawableHolder?.let { holder ->
                     ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
                 }
             }
+            3 -> {
+                petDrawableHolder?.run {
+                    ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
+                }
+            }
+            4 -> {
+                petDrawableHolder?.run {
+                    ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
+                }
+            }
+            5 -> {
+                petDrawableHolder?.run {
+                    ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
+                }
+            }
+            7 -> {
+                petDrawableHolder?.run {
+                    ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
+                }
+            }
         }
     }
 
-    fun onPetAnimationEnd(index: Int, animation: Animator) {
+    fun onPetAnimationEnd(index: Int) {
         when (index) {
             0 -> {
                 currentIndex = 1
-                petObjectAnimatorList[1].startDelay = restDuration
-                petObjectAnimatorList[1].start()
+                /*petObjectAnimatorList[1].startDelay = restDuration
+                petObjectAnimatorList[1].start()*/
             }
             1 -> {
                 currentIndex = 2
                 petDrawableHolder?.let { holder ->
                     ivPetFish.setImageDrawable(holder.turnRightDrawable)
                 }
-                petObjectAnimatorList[2].startDelay = turnDuration
-                petObjectAnimatorList[2].start()
+                /*petObjectAnimatorList[2].startDelay = turnDuration
+                petObjectAnimatorList[2].start()*/
             }
-        }
-    }
-
-    private val petFishUpdateListener = ValueAnimator.AnimatorUpdateListener {
-        val x = it.getAnimatedValue(it.values[0].propertyName).toString().toFloat()
-        val y = it.getAnimatedValue(it.values[1].propertyName).toString().toFloat()
-        Log.i(TAG, "addUpdateListener:(x:$x,y:$y) ")
-        when {
-            isInPointRect(1, x, y) -> {
-                it.pause()
-                currentIndex = 1
-                postDelayed({
-                    it.resume()
-                }, restDuration)
-            }
-            isInPointRect(2, x, y) -> {
-                it.pause()
-                currentIndex = 2
-                petDrawableHolder?.let { holder ->
-                    ivPetFish.setImageDrawable(holder.turnRightDrawable)
-                    postDelayed({
-                        it.resume()
-                        ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
-                    }, turnDuration)
-                }
-
-            }
-            isInPointRect(3, x, y) -> {
+            2 -> {
                 currentIndex = 3
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
             }
-            isInPointRect(4, x, y) -> {
+            3 -> {
                 currentIndex = 4
+                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
             }
-            isInPointRect(5, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+            4 -> {
                 currentIndex = 5
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(6, x, y) -> {
-                it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
-                currentIndex = 6
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(7, x, y) -> {
-                it.pause()
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+            }
+            5 -> {
+                currentIndex = 6
+                //ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+            }
+            6 -> {
                 currentIndex = 7
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
-                    }
-                }, turnDuration)
-            }
-            isInPointRect(8, x, y) -> {
-                it.pause()
-                currentIndex = 8
-                postDelayed({
-                    it.resume()
-                }, restDuration)
-            }
-            isInPointRect(9, x, y) -> {
-                currentIndex = 9
-            }
-            isInPointRect(10, x, y) -> {
-                currentIndex = 10
-            }
-            isInPointRect(11, x, y) -> {
-                it.pause()
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
-                currentIndex = 11
-                postDelayed({
-                    it.resume()
-                    petDrawableHolder?.run {
-                        ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
-                    }
-                }, turnDuration)
+            }
+            7 -> {
+                if (!isEnd) {
+                    petAnimatorSet.start()
+                }
             }
         }
     }
-
 
     private var mOnItemListener: OnClickListener? = null
 
     /**
-     * 设置1000的petFishSpeed速度.
+     * 设置宠物跑动的时间,单位秒
      */
     var petFishSpeed = SPEED
         set(value) {
             field = value
             pause()
+            petAnimatorSet.duration = value * 1000L
             resume()
         }
-
-
 }
 
 

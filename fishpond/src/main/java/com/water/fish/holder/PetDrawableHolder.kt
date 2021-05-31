@@ -39,5 +39,5 @@ data class PetDrawableHolder(
 
     fun toLeftDrawable(): GifDrawable = if (isSpraying) spurtLeftDrawable else moveLeftDrawable
 
-    fun toRightDrawable(): GifDrawable = if (isSpraying) spurtLeftDrawable else moveLeftDrawable
+    fun toRightDrawable(): GifDrawable = if (isSpraying) spurtRightDrawable else moveRightDrawable
 }

@@ -2,6 +2,7 @@ package com.fishpond.demo.activity
 
 import android.content.Context
 import android.view.View
+import android.widget.Toast
 import com.fishpond.demo.R
 import com.fishpond.demo.base.MyBaseActivity
 import com.fishpond.demo.databinding.ActivityBlueWaterBinding
@@ -50,6 +51,47 @@ class BlueWaterActivity : MyBaseActivity() {
     override fun onInitView() {
         mBinding.fishLayout.setFishData(mutableListOf(petFish,mShell))
         mBinding.fishLayout.start()
+
+        mBinding.tvStart.setOnClickListener {
+            mBinding.fishLayout.restart()
+        }
+        mBinding.tvPause.setOnClickListener {
+            mBinding.fishLayout.pause()
+        }
+        mBinding.tvResume.setOnClickListener {
+            mBinding.fishLayout.resume()
+        }
+        mBinding.tvEnd.setOnClickListener {
+            mBinding.fishLayout.end()
+        }
+
+        mBinding.btnOpen.setOnClickListener {
+            DemoActivity.jumpTo(this)
+        }
+
+        mBinding.btnChange.setOnClickListener {
+            petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+            mBinding.fishLayout.notifyDataSetChanged()
+        }
+        mBinding.btnSpray.setOnClickListener {
+            petFish.isSpraying = !petFish.isSpraying
+            mBinding.fishLayout.notifyDataSetChanged()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBinding.fishLayout.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mBinding.fishLayout.pause()
+    }
+
+    //
+    override fun onRestart() {
+        super.onRestart()
     }
 
 

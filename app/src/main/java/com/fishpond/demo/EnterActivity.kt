@@ -27,6 +27,9 @@ class EnterActivity : AppCompatActivity() {
             SeaActivity.jumpTo(this)
         }
         mBinding.btnD.setOnClickListener {
+            SeawaterActivity.jumpTo(this)
+        }
+        mBinding.btnE.setOnClickListener {
             BlueWaterActivity.jumpTo(this)
         }
         BlueWaterActivity.jumpTo(this)

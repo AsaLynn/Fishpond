@@ -14,14 +14,14 @@ import com.water.fish.BlueWaterLayout
  * 7:p11->p12.
  * Created by zxn on 2021/5/30.
  */
-class PetAnimatorListener(val index: Int, val layout: BlueWaterLayout) : Animator.AnimatorListener {
+class PetAnimatorListener(private val index: Int, val layout: BlueWaterLayout) : Animator.AnimatorListener {
 
     override fun onAnimationStart(animation: Animator) {
-        layout.onPetAnimationStart(index,animation)
+        layout.onPetAnimationStart(index)
     }
 
     override fun onAnimationEnd(animation: Animator) {
-        layout.onPetAnimationEnd(index,animation)
+        layout.onPetAnimationEnd(index)
     }
 
     override fun onAnimationCancel(animation: Animator) {
