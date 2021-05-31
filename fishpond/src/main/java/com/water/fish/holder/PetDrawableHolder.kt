@@ -26,10 +26,10 @@ data class PetDrawableHolder(
                 GifDrawable(res, entity.moveRightResId),
                 GifDrawable(res, entity.turnRightResId)
                     .apply {
-                        loopCount = 1
+                        //loopCount = 1
                     },
                 GifDrawable(res, entity.turnLeftResId).apply {
-                    loopCount = 1
+                    //loopCount = 1
                 },
                 GifDrawable(res, entity.spurtLeftResId),
                 GifDrawable(res, entity.spurtRightResId),

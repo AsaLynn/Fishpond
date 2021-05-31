@@ -23,7 +23,8 @@ import kotlin.collections.ArrayList
 
 /**
  *  海底布局.
- *  采用ObjectAnimator+AnimatorSet + View位移+多个Path,动画组合进行监听.
+ *  采用ObjectAnimator + View位移+多个Path,动画组合进行监听.
+ *  AnimatorSet无法操作动画的重复运行.
  *  参考资料:
  *  https://www.cnblogs.com/endian11/p/9604196.html
  *  https://github.com/koral--/android-gif-drawable
@@ -126,13 +127,19 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     private val petObjectAnimatorList = mutableListOf<Animator>()
 
 
-    private val petAnimatorSet = AnimatorSet().apply {
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator) {
-                Log.i(TAG, "onAnimationStart: ")
-            }
-        })
-    }
+    /* private val petAnimatorSet = AnimatorSet().apply {
+         addListener(object : AnimatorListenerAdapter() {
+             override fun onAnimationStart(animation: Animator) {
+                 Log.i(TAG, "onAnimationStart: ")
+             }
+
+             override fun onAnimationEnd(animation: Animator) {
+                 Log.i(TAG, "onAnimationEnd: ")
+                 //animation.start()
+                 restart()
+             }
+         })
+     }*/
 
     private var isStarted = false
 
@@ -181,36 +188,13 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         if (hasWindowFocus) {
             if (isStarted) {
                 if (petPathList.isNotEmpty()) {
-                    if (!petAnimatorSet.isStarted) {
-
-                        petAnimatorSet.duration = 4 * 1000L
-
-                        //petAnimatorSet.playSequentially(petObjectAnimatorList)
-
-                        petAnimatorSet.play(petObjectAnimatorList[1])
-                            .after(restDuration * SPEED_MOVE_SECOND)
-                            .after(petObjectAnimatorList[0])
-
-                        petAnimatorSet.play(petObjectAnimatorList[2])
-                            .after(petObjectAnimatorList[1])
-
-                        petAnimatorSet.play(petObjectAnimatorList[3]).after(turnDuration)
-                            .after(petObjectAnimatorList[2])
-
-                        petAnimatorSet.play(petObjectAnimatorList[4]).after(turnDuration)
-                            .after(petObjectAnimatorList[3])
-
-                        petAnimatorSet.play(petObjectAnimatorList[5]).after(turnDuration)
-                            .after(petObjectAnimatorList[4])
-
-                        petAnimatorSet.play(petObjectAnimatorList[6])
-                            .after(restDuration * SPEED_MOVE_SECOND)
-                            .after(petObjectAnimatorList[5])
-
-                        petAnimatorSet.play(petObjectAnimatorList[7]).after(turnDuration)
-                            .after(petObjectAnimatorList[6])
-
+                    /*if (!petAnimatorSet.isStarted) {
                         petAnimatorSet.start()
+                    }*/
+                    petObjectAnimatorList[0].run {
+                        if (!isStarted) {
+                            start()
+                        }
                     }
                 }
             }
@@ -334,15 +318,32 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     }
 
     fun restart() {
+        //petAnimatorSet.start()
+        if (petObjectAnimatorList.isNotEmpty()){
+            petObjectAnimatorList[currentIndex].run {
+                if (!isStarted) {
+                    start()
+                }
+            }
+        }
         isStarted = true
         isEnd = false
-        petAnimatorSet.start()
     }
 
     fun pause() {
-        if (!petAnimatorSet.isPaused) {
+        /*if (!petAnimatorSet.isPaused) {
             petAnimatorSet.pause()
+        }*/
+        if (petObjectAnimatorList.isNotEmpty()){
+            petObjectAnimatorList[currentIndex].run {
+                if (!this.isPaused) {
+                    this.pause()
+                }
+            }
         }
+        //.startDelay = turnDuration
+        //petObjectAnimatorList[0].start()
+
         ivAIShell.drawable?.let {
             (it as GifDrawable).stop()
         }
@@ -350,10 +351,17 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     }
 
     fun resume() {
-        if (petAnimatorSet.isStarted) {
+        /*if (petAnimatorSet.isStarted) {
             isEnd = false
             if (petAnimatorSet.isRunning) {
                 petAnimatorSet.resume()
+            }
+        }*/
+        if (petObjectAnimatorList.isNotEmpty()){
+            petObjectAnimatorList[currentIndex].run {
+                if (isPaused) {
+                    resume()
+                }
             }
         }
         ivAIShell.drawable?.let {
@@ -364,9 +372,16 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
     }
 
     fun end() {
+        if (petObjectAnimatorList.isNotEmpty()){
+            petObjectAnimatorList[currentIndex].run {
+                if (isRunning) {
+                    end()
+                }
+            }
+        }
         isStarted = false
         isEnd = true
-        petAnimatorSet.end()
+        //petAnimatorSet.end()
     }
 
     private fun initAnimation(type: Int, height: Int, iv: View) {
@@ -528,17 +543,43 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
                 petObjectAnimatorList.add(
                     ObjectAnimator.ofFloat(vgPetView, View.X, View.Y, path).apply {
                         addListener(PetAnimatorListener(index, this@BlueWaterLayout))
-                        /*addUpdateListener(PetUpdateListener(index, this@BlueWaterLayout))
                         interpolator = LinearInterpolator()
                         duration = when (index) {
-                            0 -> petFishSpeed * SPEED_MOVE_SECOND
+                            0 -> 5 * SPEED_MOVE_SECOND
                             1 -> 4 * SPEED_MOVE_SECOND
-                            2 -> 15 * SPEED_MOVE_SECOND
+                            2 -> 10 * SPEED_MOVE_SECOND
                             else -> petFishSpeed * SPEED_MOVE_SECOND
-                        }*/
+                        }
                     })
             }
         }
+
+
+        //petAnimatorSet.duration = petFishSpeed * 1000L
+        //petAnimatorSet.playSequentially(petObjectAnimatorList)
+
+        /*petAnimatorSet.play(petObjectAnimatorList[1])
+            .after(restDuration * SPEED_MOVE_SECOND)
+            .after(petObjectAnimatorList[0])
+
+        petAnimatorSet.play(petObjectAnimatorList[2])
+            .after(petObjectAnimatorList[1])
+
+        petAnimatorSet.play(petObjectAnimatorList[3]).after(turnDuration)
+            .after(petObjectAnimatorList[2])
+
+        petAnimatorSet.play(petObjectAnimatorList[4]).after(turnDuration)
+            .after(petObjectAnimatorList[3])
+
+        petAnimatorSet.play(petObjectAnimatorList[5]).after(turnDuration)
+            .after(petObjectAnimatorList[4])
+
+        petAnimatorSet.play(petObjectAnimatorList[6])
+            .after(restDuration * SPEED_MOVE_SECOND)
+            .after(petObjectAnimatorList[5])
+
+        petAnimatorSet.play(petObjectAnimatorList[7]).after(turnDuration)
+            .after(petObjectAnimatorList[6])*/
     }
 
     fun testPathAnimator() {
@@ -624,7 +665,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
             }
             7 -> {
                 petDrawableHolder?.run {
-                    ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
+                    ivPetFish.setImageDrawable(this.toRightDrawable())
                 }
             }
         }
@@ -634,40 +675,56 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         when (index) {
             0 -> {
                 currentIndex = 1
-                /*petObjectAnimatorList[1].startDelay = restDuration
-                petObjectAnimatorList[1].start()*/
+                petObjectAnimatorList[1].startDelay = restDuration * SPEED_MOVE_SECOND
+                petObjectAnimatorList[1].start()
             }
             1 -> {
                 currentIndex = 2
                 petDrawableHolder?.let { holder ->
                     ivPetFish.setImageDrawable(holder.turnRightDrawable)
                 }
-                /*petObjectAnimatorList[2].startDelay = turnDuration
-                petObjectAnimatorList[2].start()*/
+                petObjectAnimatorList[2].startDelay = turnDuration
+                petObjectAnimatorList[2].start()
             }
             2 -> {
                 currentIndex = 3
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+                petObjectAnimatorList[3].startDelay = turnDuration
+                petObjectAnimatorList[3].start()
             }
             3 -> {
                 currentIndex = 4
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+                petObjectAnimatorList[4].startDelay = turnDuration
+                petObjectAnimatorList[4].start()
             }
             4 -> {
                 currentIndex = 5
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+                petObjectAnimatorList[5].startDelay = turnDuration
+                petObjectAnimatorList[5].start()
             }
             5 -> {
                 currentIndex = 6
                 //ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+                petObjectAnimatorList[6].startDelay = restDuration * SPEED_MOVE_SECOND
+                petObjectAnimatorList[6].start()
             }
             6 -> {
                 currentIndex = 7
                 ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
+                petObjectAnimatorList[7].startDelay = turnDuration
+                petObjectAnimatorList[7].start()
             }
             7 -> {
+                currentIndex = 0
                 if (!isEnd) {
-                    petAnimatorSet.start()
+                    petObjectAnimatorList[0].startDelay = turnDuration
+                    petObjectAnimatorList[0].start()
+                    //petAnimatorSet.playSequentially(petObjectAnimatorList)
+                    //petAnimatorSet.start()
+                    //end()
+                    //petAnimatorSet.childAnimations[0].start()
                 }
             }
         }
@@ -682,7 +739,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         set(value) {
             field = value
             pause()
-            petAnimatorSet.duration = value * 1000L
+            //petAnimatorSet.duration = value * 1000L
             resume()
         }
 }
