@@ -11,6 +11,7 @@ import com.water.fish.R
 import pl.droidsonroids.gif.GifImageView
 
 /**
+ *  https://blog.csdn.net/Jiang_Rong_Tao/article/details/58635019
  *  鱼宠View.
  *  Created by zxn on 2021/6/1.
  **/

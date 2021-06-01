@@ -210,12 +210,9 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
     private var currentIndex: Int = 0
 
     private val petFishAnimator by lazy {
-        //vgPetView,ivPetFish
         ObjectAnimator.ofFloat(vgPetView, View.X, View.Y, petPath).apply {
             addListener(petFishAnimatorListener)
             addUpdateListener(petFishUpdateListener)
-            //自定义从初始值 - 结束值 进行过渡
-            //setEvaluator(PetPointEvaluator(petPointList))
             interpolator = LinearInterpolator()
             duration = petFishSpeed * SPEED_MOVE_SECOND
         }

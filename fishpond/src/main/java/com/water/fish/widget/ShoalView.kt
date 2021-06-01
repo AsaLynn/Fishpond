@@ -7,6 +7,8 @@ import com.water.fish.R
 import pl.droidsonroids.gif.GifImageView
 
 /**
+ *  (轨迹动画)
+ *  https://blog.csdn.net/Jiang_Rong_Tao/article/details/58635019
  *  (贝塞尔曲线实现波浪动画)
  *  https://blog.csdn.net/zz51233273/article/details/107866070
  *  (绘制波浪线)

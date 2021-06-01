@@ -79,20 +79,20 @@ class BlueWaterActivity : MyBaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mBinding.fishLayout.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mBinding.fishLayout.pause()
-    }
-
-    //
-    override fun onRestart() {
-        super.onRestart()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        mBinding.fishLayout.resume()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        mBinding.fishLayout.pause()
+//    }
+//
+//    //
+//    override fun onRestart() {
+//        super.onRestart()
+//    }
 
 
 }

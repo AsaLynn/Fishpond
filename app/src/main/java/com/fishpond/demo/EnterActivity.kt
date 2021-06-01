@@ -32,7 +32,7 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnE.setOnClickListener {
             BlueWaterActivity.jumpTo(this)
         }
-        SeafloorActivity.jumpTo(this)
+        BlueWaterActivity.jumpTo(this)
     }
 
 

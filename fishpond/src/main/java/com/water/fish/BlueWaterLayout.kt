@@ -143,6 +143,8 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
 
     private var isStarted = false
 
+    private var isRunning = false
+
     /**
      * 转身持续时间.turnDuration
      */
@@ -186,7 +188,7 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
         super.onWindowFocusChanged(hasWindowFocus)
         Log.i(TAG, "onWindowFocusChanged: ")
         if (hasWindowFocus) {
-            if (isStarted) {
+            if (isStarted && !isRunning) {
                 if (petPathList.isNotEmpty()) {
                     /*if (!petAnimatorSet.isStarted) {
                         petAnimatorSet.start()
@@ -194,13 +196,14 @@ class BlueWaterLayout : FrameLayout, View.OnClickListener {
                     petObjectAnimatorList[0].run {
                         if (!isStarted) {
                             start()
+                            this@BlueWaterLayout.isRunning = true
                         }
                     }
                 }
             }
-            resume()
+            //resume()
         } else {
-            pause()
+            //pause()
         }
     }
 
