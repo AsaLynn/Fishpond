@@ -3,7 +3,6 @@ package com.water.fish
 import android.animation.*
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Point
 import android.util.AttributeSet
@@ -11,21 +10,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.*
-import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.water.fish.holder.PetDrawableHolder
-import com.zxn.popup.EasyPopup
+import com.water.fish.widget.PetView
 import pl.droidsonroids.gif.GifDrawable
-import pl.droidsonroids.gif.GifImageView
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
 
 /**
- *  海底布局.
+ *  海底布局.   SeafloorLayout
  *  采用ObjectAnimator+View位移+Path
  *  参考资料:
  *  https://www.jianshu.com/p/036aecb64093
@@ -36,7 +32,7 @@ import kotlin.math.abs
  *  https://github.com/koral--/android-gif-drawable
  *  https://www.javadoc.io/doc/pl.droidsonroids.gif/android-gif-drawable
  **/
-class SeafloorLayout : FrameLayout, View.OnClickListener {
+class SeafloorLayout : RelativeLayout, View.OnClickListener {
 
     companion object {
 
@@ -62,18 +58,23 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     private val petPath = Path()
 
-    private val ivPetFish: GifImageView by lazy {
-        findViewById<GifImageView>(R.id.ivFish).apply {
-            setOnClickListener(this@SeafloorLayout)
-        }
-    }
+//    private val ivPetFish: GifImageView by lazy {
+//        findViewById<GifImageView>(R.id.ivFish).apply {
+//            setOnClickListener(this@SeafloorLayout)
+//        }
+//    }
 
     private val tvTips by lazy {
         findViewById<TextView>(R.id.tvTips)
     }
 
     private val vgPetView by lazy {
-        findViewById<View>(R.id.vgPetView)
+        /*findViewById<PetView>(R.id.vgPetView).apply {
+            setOnPetClickListener(this@SeafloorLayout)
+        }*/
+        PetView(context).apply {
+            setOnPetClickListener(this@SeafloorLayout)
+        }
     }
 
     private var mWidth = 0
@@ -95,14 +96,14 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
      */
     private var paddingPetAreaLeft = 0
 
-    private val mTipsPop: EasyPopup by lazy {
-        EasyPopup.create()
-            .setContentView(context, R.layout.layout_fish_tips)
-            .setFocusAndOutsideEnable(false)
-            .setAnchorView(ivPetFish)
-            .setNeedReMeasureWH(true)
-            .apply()
-    }
+//    private val mTipsPop: EasyPopup by lazy {
+//        EasyPopup.create()
+//            .setContentView(context, R.layout.layout_fish_tips)
+//            .setFocusAndOutsideEnable(false)
+//            .setAnchorView(ivPetFish)
+//            .setNeedReMeasureWH(true)
+//            .apply()
+//    }
 
     /**
      * 停止动画标识.
@@ -113,9 +114,11 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
         override fun onAnimationStart(animation: Animator) {
             currentIndex = 0
-            petDrawableHolder?.let {
+            /*petDrawableHolder?.let {
                 ivPetFish.setImageDrawable(if (it.isSpraying) it.spurtLeftDrawable else it.moveLeftDrawable)
-            }
+            }*/
+            //showPetFish(0)
+            vgPetView.onMoveLeft()
         }
 
         override fun onAnimationEnd(animation: Animator) {
@@ -136,6 +139,22 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 
     }
 
+//    /**
+//     * 0:展示向左移动,1:右转,2:
+//     */
+//    private fun showPetFish(type: Int) {
+//        if (fishEntityList.isNotEmpty() && fishEntityList[0] is PetFish) {
+//            (fishEntityList[0] as PetFish).run {
+//                when (type) {
+//                    0 -> ivPetFish.setImageResource(toLeftImageRes())
+//                    1 -> ivPetFish.setImageResource(turnRightResId)
+//                    2 -> ivPetFish.setImageResource(turnRightResId)
+//
+//                }
+//            }
+//        }
+//    }
+
     private val petFishUpdateListener = ValueAnimator.AnimatorUpdateListener {
         val x = it.getAnimatedValue(it.values[0].propertyName).toString().toFloat()
         val y = it.getAnimatedValue(it.values[1].propertyName).toString().toFloat()
@@ -151,14 +170,19 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             isInPointRect(2, x, y) -> {
                 it.pause()
                 currentIndex = 2
-                petDrawableHolder?.let { holder ->
+                /*petDrawableHolder?.let { holder ->
                     ivPetFish.setImageDrawable(holder.turnRightDrawable)
                     postDelayed({
                         it.resume()
                         ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
                     }, turnDuration)
-                }
-
+                }*/
+                //ivPetFish.setImageDrawable(holder.turnRightDrawable)
+                vgPetView.onTurnRight()
+                postDelayed({
+                    it.resume()
+                    vgPetView.onMoveRight()
+                }, turnDuration)
             }
             isInPointRect(3, x, y) -> {
                 currentIndex = 3
@@ -168,35 +192,50 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             }
             isInPointRect(5, x, y) -> {
                 it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
                 currentIndex = 5
-                postDelayed({
+                //ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
+                /*postDelayed({
                     it.resume()
                     petDrawableHolder?.run {
                         ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
                     }
+                }, turnDuration)*/
+                vgPetView.onTurnLeft()
+                postDelayed({
+                    it.resume()
+                    vgPetView.onMoveLeft()
                 }, turnDuration)
             }
             isInPointRect(6, x, y) -> {
                 it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
                 currentIndex = 6
+                /*ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
                 postDelayed({
                     it.resume()
                     petDrawableHolder?.run {
                         ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
                     }
+                }, turnDuration)*/
+                vgPetView.onTurnRight()
+                postDelayed({
+                    it.resume()
+                    vgPetView.onMoveRight()
                 }, turnDuration)
             }
             isInPointRect(7, x, y) -> {
                 it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
                 currentIndex = 7
+                /*ivPetFish.setImageDrawable(petDrawableHolder?.turnLeftDrawable)
                 postDelayed({
                     it.resume()
                     petDrawableHolder?.run {
                         ivPetFish.setImageDrawable(if (isSpraying) spurtLeftDrawable else moveLeftDrawable)
                     }
+                }, turnDuration)*/
+                vgPetView.onTurnLeft()
+                postDelayed({
+                    it.resume()
+                    vgPetView.onMoveLeft()
                 }, turnDuration)
             }
             isInPointRect(8, x, y) -> {
@@ -214,13 +253,18 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
             }
             isInPointRect(11, x, y) -> {
                 it.pause()
-                ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
                 currentIndex = 11
+                /*ivPetFish.setImageDrawable(petDrawableHolder?.turnRightDrawable)
                 postDelayed({
                     it.resume()
                     petDrawableHolder?.run {
                         ivPetFish.setImageDrawable(if (isSpraying) spurtRightDrawable else moveRightDrawable)
                     }
+                }, turnDuration)*/
+                vgPetView.onTurnRight()
+                postDelayed({
+                    it.resume()
+                    vgPetView.onMoveRight()
                 }, turnDuration)
             }
         }
@@ -267,8 +311,21 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         setWillNotDraw(false)
         isClickable = false
         onInitAttributeSet(attrs)
-        LayoutInflater.from(context).inflate(R.layout.layout_shells_ai, this)
-        LayoutInflater.from(context).inflate(R.layout.layout_pet, this)
+
+        LayoutInflater.from(context).inflate(R.layout.layout_shells_ai, null).apply {
+            addView(this, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                addRule(ALIGN_PARENT_BOTTOM)
+                addRule(ALIGN_PARENT_RIGHT)
+            })
+        }
+
+        //LayoutInflater.from(context).inflate(R.layout.layout_pet, this)
+
+        addView(vgPetView,
+            LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                addRule(ALIGN_PARENT_BOTTOM)
+                addRule(ALIGN_PARENT_RIGHT)
+            })
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -336,16 +393,18 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         }
     }
 
-    private var petDrawableHolder: PetDrawableHolder? = null
+//    private var petDrawableHolder: PetDrawableHolder? = null
 
 
     fun notifyDataSetChanged() {
         pause()
         fishEntityList.forEachIndexed { _, entity ->
             if (entity is PetFish) {
-                petDrawableHolder = PetDrawableHolder.create(resources, entity)
+                //petDrawableHolder = PetDrawableHolder.create(resources, entity)
                 //更换皮肤
-                setPetDrawable()
+                //setPetDrawable(entity)
+
+                vgPetView.onChanged(currentIndex, entity)
             } else if (entity is Shell) {
                 if (entity.shellResId != 0) {
                     ivAIShell.setImageResource(entity.shellResId)
@@ -365,19 +424,26 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         resume()
     }
 
-    //pet
-    private fun setPetDrawable() {
-        petDrawableHolder?.let {
-            when (currentIndex) {
-                0, 1, 5, 7, 8, 9, 10, 12 -> {
-                    ivPetFish.setImageDrawable(it.toLeftDrawable())
-                }
-                2, 3, 4, 6, 11 -> {
-                    ivPetFish.setImageDrawable(it.toRightDrawable())
-                }
-            }
-        }
-    }
+//    private fun setPetDrawable(petFish: PetFish) {
+//        /*petDrawableHolder?.let {
+//            when (currentIndex) {
+//                0, 1, 5, 7, 8, 9, 10, 12 -> {
+//                    ivPetFish.setImageDrawable(it.toLeftDrawable())
+//                }
+//                2, 3, 4, 6, 11 -> {
+//                    ivPetFish.setImageDrawable(it.toRightDrawable())
+//                }
+//            }
+//        }*/
+//        when (currentIndex) {
+//            0, 1, 5, 7, 8, 9, 10, 12 -> {
+//                ivPetFish.setImageResource(petFish.toLeftImageRes())
+//            }
+//            2, 3, 4, 6, 11 -> {
+//                ivPetFish.setImageResource(petFish.toRightImageRes())
+//            }
+//        }
+//    }
 
     fun setFishData(entityList: MutableList<FishEntity>) {
         if (entityList.isNullOrEmpty()) throw IllegalStateException("entityList can not be null or empty !")
@@ -418,7 +484,7 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         if (!petPath.isEmpty) {
             if (petFishAnimator.isStarted) {
                 isEnd = false
-                if (petFishAnimator.isRunning) {
+                if (petFishAnimator.isPaused) {
                     petFishAnimator.resume()
                 }
             }
@@ -438,80 +504,6 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         }
     }
 
-    private fun initAnimation(type: Int, height: Int, iv: View) {
-        iv.visibility = VISIBLE
-        val v = 1f
-        //        int degress = 40;
-        /**
-         * 旋转
-         */
-        var rotateAnimation: RotateAnimation? = null
-        var translateAnimation: TranslateAnimation? = null
-        val random = Random()
-        //val value = random.nextInt(50) + 1
-        //val value = random.nextInt(100) + 1
-        val value = 100
-        when (type) {
-            TYPE_1 -> {
-                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
-                rotateAnimation = RotateAnimation(
-                    0F,
-                    value.toFloat(),
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v,
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v
-                )
-            }
-            TYPE_2 -> {
-                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
-                rotateAnimation = RotateAnimation(
-                    0F,
-                    (-value).toFloat(),
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v,
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v
-                )
-            }
-            TYPE_3 -> {
-                translateAnimation = TranslateAnimation(0f, 1000F, 0f, 0f)
-                /*rotateAnimation = RotateAnimation(
-                    0F,
-                    (-value).toFloat(),
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v,
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v
-                )*/
-            }
-            TYPE_4 -> {
-                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
-                rotateAnimation = RotateAnimation(
-                    0F,
-                    value.toFloat(),
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v,
-                    RotateAnimation.RELATIVE_TO_SELF,
-                    v
-                )
-            }
-        }
-        /**
-         * 平移.
-         */
-        val animationSet = AnimationSet(true)
-        animationSet.duration = 15000
-        animationSet.interpolator = LinearInterpolator()
-        if (translateAnimation != null) {
-            animationSet.addAnimation(translateAnimation)
-            translateAnimation.repeatCount = Animation.INFINITE
-        }
-        if (rotateAnimation != null) {
-            animationSet.addAnimation(rotateAnimation)
-        }
-        iv.startAnimation(animationSet)
-    }
 
     /**
      * 装载游泳路线坐标点
@@ -520,10 +512,10 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         //计算路线的坐标点
         //坐标点已经装载,则不再进行装载.
 
-        val topMargin = (ivPetFish.layoutParams as ConstraintLayout.LayoutParams).topMargin
-        val fishWidth = ivPetFish.layoutParams.width
+        //val topMargin = (ivPetFish.layoutParams as ConstraintLayout.LayoutParams).topMargin
         //val fishHeight = ivPetFish.layoutParams.height + topMargin
-        val fishHeight = vgPetView.layoutParams.height
+        val fishWidth = vgPetView.measuredWidth
+        val fishHeight = vgPetView.measuredHeight
         petPath.reset()
         petPointList.clear()
         if (petPath.isEmpty) {
@@ -599,11 +591,6 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
         }
     }
 
-    private fun isInPointRect(point: Point, x: Float, y: Float): Boolean =
-        abs(point.x - (x + 0.5F).toInt()) < 10
-                && abs(point.y - (y + 0.5F).toInt()) < 10
-
-
     private fun isInPointRect(index: Int, x: Float, y: Float): Boolean {
 
         if (petPointList.isEmpty()) return false
@@ -614,45 +601,6 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
                 && (index - currentIndex) == 1
     }
 
-
-    fun testPathAnimator() {
-        val path = Path().apply {
-            moveTo(200f, 200f)
-            lineTo(200F * 3, 200F)
-            lineTo(200F * 3, 200F * 5)
-            lineTo(200F * 1, 200F * 5)
-            lineTo(200F * 3, 200F * 1)
-        }
-        val moveAnimator = ObjectAnimator.ofFloat(ivPetFish, "x", "y", path)
-        moveAnimator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-                //Log.i(TAG, "onAnimationStart: ")
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                //l.removeView(imageView)
-            }
-
-            override fun onAnimationCancel(animation: Animator) {
-                //l.removeView(imageView)
-            }
-
-            override fun onAnimationRepeat(animation: Animator) {
-
-            }
-        })
-        moveAnimator.addUpdateListener {
-            /*Log.i(
-                TAG,
-                "addUpdateListener:(x:${it.getAnimatedValue(it.values[0].propertyName)},y:${
-                    it.getAnimatedValue(it.values[1].propertyName)
-                }) "
-            )*/
-        }
-        moveAnimator.interpolator = LinearInterpolator()
-        moveAnimator.duration = 5 * 1000
-        moveAnimator.start()
-    }
 
     val ivStone by lazy {
         findViewById<ImageView>(R.id.ivStone)
@@ -685,15 +633,118 @@ class SeafloorLayout : FrameLayout, View.OnClickListener {
 }
 
 
-//    protected fun dp2px(dp: Float): Int {
-//        val scale: Float = mContext.getResources().getDisplayMetrics().density
-//        return (dp * scale + 0.5f).toInt()
-//    }
+/*private fun initAnimation(type: Int, height: Int, iv: View) {
+        iv.visibility = VISIBLE
+        val v = 1f
+        //        int degress = 40;
+        */
+/**
+ * 旋转
+ *//*
+        var rotateAnimation: RotateAnimation? = null
+        var translateAnimation: TranslateAnimation? = null
+        val random = Random()
+        //val value = random.nextInt(50) + 1
+        //val value = random.nextInt(100) + 1
+        val value = 100
+        when (type) {
+            TYPE_1 -> {
+                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
+                rotateAnimation = RotateAnimation(
+                    0F,
+                    value.toFloat(),
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v,
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v
+                )
+            }
+            TYPE_2 -> {
+                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
+                rotateAnimation = RotateAnimation(
+                    0F,
+                    (-value).toFloat(),
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v,
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v
+                )
+            }
+            TYPE_3 -> {
+                translateAnimation = TranslateAnimation(0f, 1000F, 0f, 0f)
+                *//*rotateAnimation = RotateAnimation(
+                    0F,
+                    (-value).toFloat(),
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v,
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v
+                )*//*
+            }
+            TYPE_4 -> {
+                translateAnimation = TranslateAnimation(0f, height.toFloat(), 0f, 0f)
+                rotateAnimation = RotateAnimation(
+                    0F,
+                    value.toFloat(),
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v,
+                    RotateAnimation.RELATIVE_TO_SELF,
+                    v
+                )
+            }
+        }
+        */
+
+/*
+    val animationSet = AnimationSet(true)
+    animationSet.duration = 15000
+    animationSet.interpolator = LinearInterpolator()
+    if (translateAnimation != null) {
+        animationSet.addAnimation(translateAnimation)
+        translateAnimation.repeatCount = Animation.INFINITE
+    }
+    if (rotateAnimation != null) {
+        animationSet.addAnimation(rotateAnimation)
+    }
+    iv.startAnimation(animationSet)
+}*/
+
+
+//    fun testPathAnimator() {
+//        val path = Path().apply {
+//            moveTo(200f, 200f)
+//            lineTo(200F * 3, 200F)
+//            lineTo(200F * 3, 200F * 5)
+//            lineTo(200F * 1, 200F * 5)
+//            lineTo(200F * 3, 200F * 1)
+//        }
+//        val moveAnimator = ObjectAnimator.ofFloat(ivPetFish, "x", "y", path)
+//        moveAnimator.addListener(object : Animator.AnimatorListener {
+//            override fun onAnimationStart(animation: Animator) {
+//                //Log.i(TAG, "onAnimationStart: ")
+//            }
 //
-//    protected fun sp2px(sp: Float): Int {
-//        val scale: Float = this.mContext.getResources().getDisplayMetrics().scaledDensity
-//        return (sp * scale + 0.5f).toInt()
+//            override fun onAnimationEnd(animation: Animator) {
+//                //l.removeView(imageView)
+//            }
+//
+//            override fun onAnimationCancel(animation: Animator) {
+//                //l.removeView(imageView)
+//            }
+//
+//            override fun onAnimationRepeat(animation: Animator) {
+//
+//            }
+//        })
+//        moveAnimator.addUpdateListener {
+//            /*Log.i(
+//                TAG,
+//                "addUpdateListener:(x:${it.getAnimatedValue(it.values[0].propertyName)},y:${
+//                    it.getAnimatedValue(it.values[1].propertyName)
+//                }) "
+//            )*/
+//        }
+//        moveAnimator.interpolator = LinearInterpolator()
+//        moveAnimator.duration = 5 * 1000
+//        moveAnimator.start()
 //    }
-
-
-

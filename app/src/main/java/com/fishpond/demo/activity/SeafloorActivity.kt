@@ -45,6 +45,8 @@ class SeafloorActivity : AppCompatActivity() {
         ActivitySeafloorBinding.inflate(layoutInflater)
     }
 
+    private var mIsChange = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
@@ -56,7 +58,7 @@ class SeafloorActivity : AppCompatActivity() {
         mBinding.fishLayout.start()
 
         mBinding.tvStart.setOnClickListener {
-            Toast.makeText(this, "开始", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "开始", Toast.LENGTH_SHORT).show()
             mBinding.fishLayout.start()
         }
         mBinding.tvPause.setOnClickListener {
@@ -72,7 +74,15 @@ class SeafloorActivity : AppCompatActivity() {
             DemoActivity.jumpTo(this)
         }
         mBinding.btnChange.setOnClickListener {
-            petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+            mIsChange = !mIsChange
+            if (mIsChange){
+                petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+                petFish.moveRightResId = R.mipmap.ic_fish_pet_right_normal_fen
+            }else{
+                petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal
+                petFish.moveRightResId = R.mipmap.ic_fish_pet_right_normal
+            }
+
             mBinding.fishLayout.notifyDataSetChanged()
         }
         mBinding.btnSpray.setOnClickListener {
@@ -82,7 +92,9 @@ class SeafloorActivity : AppCompatActivity() {
         }
         mBinding.fishLayout.setOnItemClickListener {
             if (it.id == R.id.ivAIShell){
-                Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
+
+
             }
         }
         mBinding.btnFastA.setOnClickListener {

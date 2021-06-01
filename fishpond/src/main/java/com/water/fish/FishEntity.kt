@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import pl.droidsonroids.gif.GifDrawable
 import kotlin.math.abs
 
 /**
@@ -423,6 +424,10 @@ class PetFish : FishEntity() {
     }
 
     var isChange = false
+
+    fun toLeftImageRes(): Int = if (isSpraying) spurtLeftResId else moveLeftResId
+
+    fun toRightImageRes(): Int = if (isSpraying) spurtRightResId else moveRightResId
 }
 
 /**
