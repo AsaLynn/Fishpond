@@ -92,9 +92,7 @@ class SeafloorActivity : AppCompatActivity() {
         }
         mBinding.fishLayout.setOnItemClickListener {
             if (it.id == R.id.ivAIShell){
-                //Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
-
-
+                Toast.makeText(this@SeafloorActivity,"click",Toast.LENGTH_SHORT).show()
             }
         }
         mBinding.btnFastA.setOnClickListener {

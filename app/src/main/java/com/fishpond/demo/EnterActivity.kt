@@ -35,5 +35,4 @@ class EnterActivity : AppCompatActivity() {
         BlueWaterActivity.jumpTo(this)
     }
 
-
 }

@@ -16,7 +16,14 @@
         <attr name="waterBottomHeight" />
         <attr name="paddingPetAreaLeft" />
     </declare-styleable>
+
+    <declare-styleable name="BlueWaterLayout">
+        <attr name="fishPetAreaHeight" />
+        <attr name="waterBottomHeight" />
+        <attr name="paddingPetAreaLeft" />
+    </declare-styleable>
 </resources>
+
 
 
     <!--

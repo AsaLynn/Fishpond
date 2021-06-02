@@ -104,7 +104,7 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
 
         override fun onAnimationStart(animation: Animator) {
             currentIndex = 0
-            vgPetView.onMoveLeft()
+            vgPetView.moveLeft()
         }
 
         override fun onAnimationEnd(animation: Animator) {
@@ -140,10 +140,10 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
             isInPointRect(2, x, y) -> {
                 it.pause()
                 currentIndex = 2
-                vgPetView.onTurnRight()
+                vgPetView.turnRight()
                 postDelayed({
                     it.resume()
-                    vgPetView.onMoveRight()
+                    vgPetView.moveRight()
                 }, turnDuration)
             }
             isInPointRect(3, x, y) -> {
@@ -155,28 +155,28 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
             isInPointRect(5, x, y) -> {
                 it.pause()
                 currentIndex = 5
-                vgPetView.onTurnLeft()
+                vgPetView.turnLeft()
                 postDelayed({
                     it.resume()
-                    vgPetView.onMoveLeft()
+                    vgPetView.moveLeft()
                 }, turnDuration)
             }
             isInPointRect(6, x, y) -> {
                 it.pause()
                 currentIndex = 6
-                vgPetView.onTurnRight()
+                vgPetView.turnRight()
                 postDelayed({
                     it.resume()
-                    vgPetView.onMoveRight()
+                    vgPetView.moveRight()
                 }, turnDuration)
             }
             isInPointRect(7, x, y) -> {
                 it.pause()
                 currentIndex = 7
-                vgPetView.onTurnLeft()
+                vgPetView.turnLeft()
                 postDelayed({
                     it.resume()
-                    vgPetView.onMoveLeft()
+                    vgPetView.moveLeft()
                 }, turnDuration)
             }
             isInPointRect(8, x, y) -> {
@@ -195,10 +195,10 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
             isInPointRect(11, x, y) -> {
                 it.pause()
                 currentIndex = 11
-                vgPetView.onTurnRight()
+                vgPetView.turnRight()
                 postDelayed({
                     it.resume()
-                    vgPetView.onMoveRight()
+                    vgPetView.moveRight()
                 }, turnDuration)
             }
         }
@@ -243,24 +243,8 @@ class SeafloorLayout : RelativeLayout, View.OnClickListener {
         isClickable = false
         onInitAttributeSet(attrs)
 
-        LayoutInflater.from(context).inflate(R.layout.layout_seafloor_bottom, this)
+        LayoutInflater.from(context).inflate(R.layout.layout_blue_water, this)
 
-        /*val shellLayout = LayoutInflater.from(context).inflate(R.layout.layout_shells_ai, null).apply {
-            addView(this, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                addRule(ALIGN_PARENT_BOTTOM)
-                addRule(ALIGN_PARENT_RIGHT)
-            })
-        }
-
-        addView(mShoalView)
-
-        addView(vgPetView,
-            LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                //addRule(ABOVE,ivStone.id)
-                addRule(ALIGN_PARENT_BOTTOM)
-                addRule(ALIGN_PARENT_RIGHT)
-                bottomMargin = 200
-            })*/
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

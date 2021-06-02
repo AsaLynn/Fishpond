@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案1"
+        android:text="FishpondLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案2"
+        android:text="SeafloorLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnA" />
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案3"
+        android:text="SeaLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnB" />
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案4"
+        android:text="SeawaterLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnC" />
@@ -53,10 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/colorPrimaryDark"
-        android:text="方案5"
+        android:text="BlueWaterLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
-        app:layout_constraintTop_toBottomOf="@id/btnC" />
+        app:layout_constraintTop_toBottomOf="@id/btnD" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

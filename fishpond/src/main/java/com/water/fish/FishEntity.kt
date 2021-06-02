@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import pl.droidsonroids.gif.GifDrawable
 import kotlin.math.abs
 
 /**
@@ -18,6 +17,8 @@ sealed class FishEntity {
     companion object {
         private const val TAG = "FishEntity"
     }
+
+    var moveSpeed = 10L
 
     var moveLeftResId: Int = 0
 

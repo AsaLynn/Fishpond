@@ -17,11 +17,11 @@ import com.water.fish.BlueWaterLayout
 class PetAnimatorListener(private val index: Int, val layout: BlueWaterLayout) : Animator.AnimatorListener {
 
     override fun onAnimationStart(animation: Animator) {
-        layout.onPetAnimationStart(index)
+        //layout.onPetAnimationStart(index)
     }
 
     override fun onAnimationEnd(animation: Animator) {
-        layout.onPetAnimationEnd(index)
+        //layout.onPetAnimationEnd(index)
     }
 
     override fun onAnimationCancel(animation: Animator) {

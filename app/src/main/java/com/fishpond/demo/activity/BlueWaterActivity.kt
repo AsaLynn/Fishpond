@@ -77,7 +77,13 @@ class BlueWaterActivity : MyBaseActivity() {
             petFish.isSpraying = !petFish.isSpraying
             mBinding.fishLayout.notifyDataSetChanged()
         }
+        mBinding.fishLayout.setOnItemClickListener {
+            if (it.id == R.id.ivAIShell){
+                Toast.makeText(this,"click:贝壳!",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
 //    override fun onResume() {
 //        super.onResume()

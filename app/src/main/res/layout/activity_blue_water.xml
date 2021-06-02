@@ -139,8 +139,7 @@
         android:background="#00c0c4"
         app:layout_constraintBottom_toTopOf="@id/tvStart"
         app:layout_constraintTop_toBottomOf="@id/titleView"
-        app:paddingPetAreaLeft="@dimen/dp_10"
-        app:waterBottomHeight="@dimen/dp_80" />
+        app:paddingPetAreaLeft="@dimen/dp_40" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
