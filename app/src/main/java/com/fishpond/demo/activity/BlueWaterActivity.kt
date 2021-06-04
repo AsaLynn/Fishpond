@@ -88,7 +88,7 @@ class BlueWaterActivity : MyBaseActivity() {
             mBinding.fishLayout.notifyDataSetChanged()
         }
         mBinding.fishLayout.setOnItemClickListener {
-            if (it.id == R.id.ivAIShell) {
+            if (it.id == R.id.shellView) {
                 Toast.makeText(this, "click:贝壳!", Toast.LENGTH_SHORT).show()
             }
         }

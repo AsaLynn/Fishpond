@@ -9,12 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.*
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.water.fish.widget.PetView
 import com.water.fish.widget.ShellView
 import com.water.fish.widget.ShoalView
-import pl.droidsonroids.gif.GifDrawable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,7 +39,7 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
 
     private val shellView by lazy {
         findViewById<ShellView>(R.id.shellView).apply {
-            //setOnPetClickListener(this@BlueWaterLayout)
+            setOnClickListener(this@BlueWaterLayout)
         }
     }
 
@@ -65,11 +63,11 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
 
     private var mOnItemListener: OnClickListener? = null
 
-    private val ivAIShell by lazy {
-        findViewById<ImageView>(R.id.ivAIShell).also {
-            it.setOnClickListener(this)
-        }
-    }
+//    private val ivAIShell by lazy {
+//        findViewById<ImageView>(R.id.ivAIShell).also {
+//            it.setOnClickListener(this)
+//        }
+//    }
 
     constructor(context: Context) : this(context, null)
 
@@ -109,7 +107,7 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.ivAIShell -> {
+            R.id.shellView -> {
                 mOnItemListener?.onClick(v)
             }
         }
@@ -188,17 +186,17 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
     }
 
     fun pause() {
-        ivAIShell.drawable?.let {
+        /*ivAIShell.drawable?.let {
             (it as GifDrawable).stop()
-        }
+        }*/
     }
 
     fun resume() {
-        ivAIShell.drawable?.let {
+        /*ivAIShell.drawable?.let {
             (it as GifDrawable).run {
                 reset()
             }
-        }
+        }*/
     }
 
     fun end() {
