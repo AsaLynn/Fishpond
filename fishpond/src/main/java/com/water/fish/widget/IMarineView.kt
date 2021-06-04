@@ -2,7 +2,7 @@ package com.water.fish.widget
 
 import android.animation.Animator
 import android.graphics.RectF
-import com.water.fish.PetFish
+import com.water.fish.FishEntity
 
 /**
  *  海产
@@ -17,7 +17,7 @@ interface IMarineView {
     /**
      * 初始化活动范围.
      */
-    fun initMovement(rectF: RectF)
+    fun onInitMovement(rectF: RectF)
 
     fun moveLeft()
 
@@ -43,7 +43,7 @@ interface IMarineView {
      */
     fun start(nextAnimator: Animator)
 
-    fun onChanged(petFish: PetFish)
+    fun  onChanged(entity: FishEntity)
 
     var moveSpeed: Long
 

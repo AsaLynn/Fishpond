@@ -45,9 +45,13 @@ class PetAnimatorListenerAdapter(view: IMarineView, animationList: List<Animator
         }
     }
 
-    fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+    override fun onAnimationRepeat(animation: Animator, position: Int, marineView: IMarineView) {
+
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         if (hasWindowFocus) {
-            animationList?.let {
+            animationList.let {
                 it[currentPathIndex].run {
                     if (!isStarted && !isRunning) {
                         start()

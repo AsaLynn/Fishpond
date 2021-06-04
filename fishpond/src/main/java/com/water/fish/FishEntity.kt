@@ -138,7 +138,7 @@ sealed class FishEntity {
     /**
      * 当前鱼的展示状态,初始值向左
      */
-    var skinResId = moveLeftResId
+    open var skinResId = moveLeftResId
 
 
     /**
@@ -434,7 +434,16 @@ class PetFish : FishEntity() {
 /**
  * 鱼群,ShoalFish
  */
-class ShoalFish : FishEntity()
+class ShoalFish : FishEntity() {
+
+    var skinResList = mutableListOf<Int>()
+
+    override var skinResId = if (skinResList.isEmpty()) 0 else skinResList.shuffled().take(1)[0]
+
+    fun shuffledSkinResId() = if (skinResList.isEmpty()) 0 else skinResList.shuffled().take(1)[0]
+
+
+}
 
 /**
  * 贝壳
@@ -450,23 +459,7 @@ class Shell : FishEntity() {
      */
     var shellResId: Int = 0
 
-
 }
-
-
-///**
-// * 测试鱼Test,
-// */
-//class TestFish : FishEntity() {
-//    override fun createPath(): Path =
-//        Path().apply {
-//            moveTo(1000f, 1000f)
-//            lineTo(100f, 1000f)
-//            lineTo(100f, 200f)
-//            lineTo(1000f, 200f)
-//            lineTo(1000f, 1000f)
-//        }
-//}
 
 
 

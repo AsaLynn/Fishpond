@@ -5,7 +5,6 @@ package com.water.fish;
  */
 
 import androidx.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -30,7 +29,7 @@ import java.lang.annotation.RetentionPolicy;
 //        FishStatus.SPRAY_STOP,
 })
 @Retention(RetentionPolicy.SOURCE)
-@interface FishStatus {
+public @interface FishStatus {
     /**
      * 休息.
      */

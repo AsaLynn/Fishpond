@@ -78,6 +78,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleView" />
 
+    <Button
+        android:id="@+id/btnFishAdd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="加鱼群"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnFastA"
+        app:layout_constraintTop_toBottomOf="@id/btnOpen" />
+
 
     <TextView
         android:id="@+id/tvStart"

@@ -12,6 +12,8 @@ import android.view.animation.*
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.water.fish.widget.PetView
+import com.water.fish.widget.ShellView
+import com.water.fish.widget.ShoalView
 import pl.droidsonroids.gif.GifDrawable
 import java.util.*
 import kotlin.collections.ArrayList
@@ -37,19 +39,17 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
         }
     }
 
-//    private var mWidth = 0
+    private val shellView by lazy {
+        findViewById<ShellView>(R.id.shellView).apply {
+            //setOnPetClickListener(this@BlueWaterLayout)
+        }
+    }
+
+    private val shoalView by lazy {
+        findViewById<ShoalView>(R.id.shoalView)
+    }
 
     private val fishEntityList = mutableListOf<FishEntity>()
-
-    /**
-     * 鱼宠区域的高度
-     */
-//    private var fishPetAreaH = 0
-
-    /**
-     * 容器底部区域高度,与宠物无法抵达的区域:即总深度-鱼宠区域的高度
-     */
-//    private var waterBottomHeight = 0
 
     /**
      * 鱼儿游动范围左边Padding
@@ -61,16 +61,11 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
      */
     private var isEnd = false
 
-
     private var isStarted = false
 
     private var mOnItemListener: OnClickListener? = null
 
-    val ivStone by lazy {
-        findViewById<ImageView>(R.id.ivStone)
-    }
-
-    val ivAIShell by lazy {
+    private val ivAIShell by lazy {
         findViewById<ImageView>(R.id.ivAIShell).also {
             it.setOnClickListener(this)
         }
@@ -94,29 +89,26 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         Log.i(TAG, "onSizeChanged: ")
-        //计算鱼宠游动范围的最大高度
-//        mWidth = width
-        /*fishPetAreaH = height - waterBottomHeight
-        if (fishPetAreaH <= 0) {
-            fishPetAreaH = height
-        }*/
-        val fishWidth = vgPetView.measuredWidth
-        val fishHeight = vgPetView.measuredHeight
         val petRectF = RectF().apply {
             left = (paddingLeft + paddingPetAreaLeft).toFloat()
             top = paddingTop.toFloat()
-            right = width - paddingRight.toFloat() - fishWidth
+            right = width - paddingRight.toFloat() - vgPetView.measuredWidth
             bottom =
-                height - paddingBottom.toFloat() - (vgPetView.layoutParams as LayoutParams).bottomMargin - fishHeight
+                height - paddingBottom.toFloat() - (vgPetView.layoutParams as LayoutParams).bottomMargin - vgPetView.measuredHeight
         }
-        vgPetView.initMovement(petRectF)
+        vgPetView.onInitMovement(petRectF)
+
+        shoalView.onInitMovement(RectF().apply {
+            left = paddingLeft.toFloat()
+            top =
+                (height - paddingBottom - shoalView.measuredHeight - (shoalView.layoutParams as LayoutParams).bottomMargin * 2).toFloat()
+            right = (width - paddingRight).toFloat()
+            bottom = (height - paddingBottom).toFloat()
+        })
     }
-
-
 
     override fun onClick(v: View) {
         when (v.id) {
-
             R.id.ivAIShell -> {
                 mOnItemListener?.onClick(v)
             }
@@ -128,17 +120,6 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
         val typedArray: TypedArray =
             context.obtainStyledAttributes(attrs, R.styleable.BlueWaterLayout)
         try {
-            /*fishPetAreaH =
-                typedArray.getDimensionPixelOffset(
-                    R.styleable.BlueWaterLayout_fishPetAreaHeight,
-                    0
-                )*/
-            /*waterBottomHeight =
-                typedArray.getDimensionPixelOffset(
-                    R.styleable.BlueWaterLayout_waterBottomHeight,
-                    0
-                )
-            Log.i(TAG, "constructor: waterBottomHeight:$waterBottomHeight")*/
             paddingPetAreaLeft =
                 typedArray.getDimensionPixelOffset(
                     R.styleable.BlueWaterLayout_paddingPetAreaLeft,
@@ -149,18 +130,31 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
         }
     }
 
+    /**
+     * ShellView.
+     */
+    override fun notifyDataSetChanged(position: Int) {
+        when (position) {
+            0 -> vgPetView.onChanged(fishEntityList[0])
+            1 -> shellView.onChanged(fishEntityList[1])
+            2 -> shoalView.onChanged(fishEntityList[2])
+        }
+    }
+
 
     override fun notifyDataSetChanged() {
         //pause()
         fishEntityList.forEachIndexed { _, entity ->
-            if (entity is PetFish) {
-                vgPetView.onChanged(entity)
-            } else if (entity is Shell) {
-                if (entity.shellResId != 0) {
-                    ivAIShell.setImageResource(entity.shellResId)
+
+            when (entity) {
+                is PetFish -> {
+                    vgPetView.onChanged(entity)
                 }
-                if (entity.stoneResId != 0) {
-                    ivStone.setImageResource(entity.stoneResId)
+                is Shell -> {
+                    shellView.onChanged(entity)
+                }
+                is ShoalFish -> {
+                    shoalView.onChanged(entity)
                 }
             }
         }
@@ -197,7 +191,6 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
         ivAIShell.drawable?.let {
             (it as GifDrawable).stop()
         }
-
     }
 
     fun resume() {
@@ -219,24 +212,3 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
     }
 
 }
-
-
-/*override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
-        super.onWindowFocusChanged(hasWindowFocus)
-        Log.i(TAG, "onWindowFocusChanged: ")
-        if (hasWindowFocus) {
-            if (isStarted && !isRunning) {
-                if (petPathList.isNotEmpty()) {
-                    petObjectAnimatorList[0].run {
-                        if (!isStarted) {
-                            start()
-                            this@BlueWaterLayout.isRunning = true
-                        }
-                    }
-                }
-            }
-            //resume()
-        } else {
-            //pause()
-        }
-    }*/

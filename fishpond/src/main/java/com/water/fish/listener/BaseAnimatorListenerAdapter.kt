@@ -2,6 +2,7 @@ package com.water.fish.listener
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.util.Log
 import com.water.fish.widget.IMarineView
 
 /**
@@ -18,21 +19,18 @@ abstract class BaseAnimatorListenerAdapter(
     var currentPathIndex: Int = 0
         private set
 
-    /**
-     * 路线总数目
-     */
-    var totalPathCount: Int = animationList.size
-
     override fun onAnimationStart(animation: Animator) {
-        super.onAnimationStart(animation)
         onAnimationStart(animation, currentPathIndex, marineView)
     }
 
     override fun onAnimationEnd(animation: Animator) {
-        super.onAnimationEnd(animation)
         onAnimationEnd(animation, currentPathIndex, marineView)
         currentPathIndex++
         currentPathIndex %= animationList.size
+    }
+
+    override fun onAnimationRepeat(animation: Animator) {
+        onAnimationRepeat(animation,currentPathIndex,marineView)
     }
 
     override fun onAnimationPause(animation: Animator) {
@@ -47,4 +45,7 @@ abstract class BaseAnimatorListenerAdapter(
 
     abstract fun onAnimationEnd(animation: Animator, position: Int, marineView: IMarineView)
 
+    abstract fun onAnimationRepeat(animation: Animator, position: Int, marineView: IMarineView)
+
+    abstract fun onWindowFocusChanged(hasWindowFocus: Boolean)
 }

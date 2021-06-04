@@ -1,10 +1,22 @@
 package com.water.fish.widget
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Path
+import android.graphics.PathMeasure
+import android.graphics.PointF
+import android.graphics.RectF
 import android.util.AttributeSet
-import com.water.fish.R
+import android.util.Log
+import android.view.View
+import android.view.animation.LinearInterpolator
+import com.water.fish.FishEntity
+import com.water.fish.ShoalFish
+import com.water.fish.listener.ShoalAnimatorListener
 import pl.droidsonroids.gif.GifImageView
+import kotlin.math.roundToInt
 
 /**
  *  (轨迹动画)
@@ -13,9 +25,14 @@ import pl.droidsonroids.gif.GifImageView
  *  https://blog.csdn.net/zz51233273/article/details/107866070
  *  (绘制波浪线)
  *  https://blog.csdn.net/IT_XF/article/details/75014160
+ *  鱼群
  *  Created by zxn on 2021/6/1.
  **/
-class ShoalView : GifImageView {
+class ShoalView : GifImageView, IMarineView {
+
+    companion object {
+        private const val TAG = "ShoalView"
+    }
 
     constructor(context: Context) : this(context, null)
 
@@ -28,9 +45,137 @@ class ShoalView : GifImageView {
     ) {
         setWillNotDraw(false)
         isClickable = false
-        setBackgroundColor(Color.WHITE)
-        setImageResource(R.mipmap.bg_fish_tips)
+        //setBackgroundColor(Color.WHITE)
+        //setImageResource(R.mipmap.bg_fish_tips)
     }
+
+    private var mShoalFish: ShoalFish? = null
+
+    private val pointList = mutableListOf<PointF>()
+
+    //波峰高度，view的1/2
+    var mCrestHeight: Float = 80f
+
+    //波峰长度
+    var mCrestWidth: Int = 200
+
+    //波起始点
+    var mStartPoint: Float = 0f
+
+    //隐藏一个波长
+    var mLeftHide: Float = 0f
+
+    private val mPathMeasure = PathMeasure()
+
+    private val petObjectAnimatorList = mutableListOf<Animator>()
+
+    private val mAnimatorListener =
+        ShoalAnimatorListener(this, petObjectAnimatorList)
+
+    override var moveSpeed: Long = 5L
+
+    override fun onInitMovement(rectF: RectF) {
+        pointList.clear()
+        rectF.run {
+            //底部开始
+            mStartPoint = rectF.centerY() - measuredHeight / 2
+            //波峰高度
+            mCrestHeight = rectF.height() / 2F
+            //波峰长度
+            mCrestWidth = rectF.width().toInt() / 2
+            //隐藏一个波长
+            mLeftHide = -mCrestWidth.toFloat()
+            //几个波峰
+            val n = (rectF.width() / mCrestWidth + 0.5).roundToInt()
+            for (i in 0..n * 4 + 4) {
+                val x = (i * mCrestWidth / 4).toFloat() - mCrestWidth
+                var y = 0f
+                when (i % 4) {
+                    0, 2 -> y = mStartPoint
+                    1 -> y = mStartPoint + mCrestHeight
+                    3 -> y = mStartPoint - mCrestHeight
+                }
+                pointList.add(PointF(x, y))
+            }
+        }
+        val path = Path()
+        path.reset()
+        path.moveTo(pointList[0].x, pointList[0].y)
+        for (i in 0..(pointList.size - 3) step 2) {
+            path.quadTo(
+                pointList[i + 1].x, pointList[i + 1].y,
+                pointList[i + 2].x,
+                pointList[i + 2].y
+            )
+        }
+        mPathMeasure.setPath(path, false)
+        val length = (mPathMeasure.length.toLong() * moveSpeed)
+        val objectAnimator = ObjectAnimator.ofFloat(this, View.X, View.Y, path).apply {
+            addListener(mAnimatorListener)
+            interpolator = LinearInterpolator()
+            duration = length
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+        }
+        petObjectAnimatorList.add(objectAnimator)
+    }
+
+    override fun turnLeft(nextAnimator: Animator) {
+        Log.i(TAG, "turnLeft: ")
+        //rotation = 360F
+        rotationY = 180F
+        moveLeft()
+    }
+
+    override fun turnRight(nextAnimator: Animator) {
+        Log.i(TAG, "turnRight: ")
+        //rotation = 180F
+        rotationY = 360F
+        moveRight()
+    }
+
+    override fun start(nextAnimator: Animator) {
+        mShoalFish?.let {
+            setImageResource(it.shuffledSkinResId())
+        }
+    }
+
+    override fun onChanged(entity: FishEntity) {
+        if (entity is ShoalFish) {
+            mShoalFish = entity
+        }
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+        mAnimatorListener.onWindowFocusChanged(hasWindowFocus)
+    }
+
+    override fun moveLeft() {
+        mShoalFish?.let {
+            setImageResource(it.shuffledSkinResId())
+        }
+    }
+
+    override fun turnRight() {
+
+    }
+
+    override fun moveRight() {
+        mShoalFish?.let {
+            setImageResource(it.shuffledSkinResId())
+        }
+    }
+
+    override fun turnLeft() {
+
+    }
+
+    override fun rest(position: Int, nextAnimator: Animator) {
+
+    }
+
+
 }
 
 
@@ -174,3 +319,59 @@ petAnimatorSet.play(petObjectAnimatorList[7]).after(turnDuration)
 //    }
 //    iv.startAnimation(animationSet)
 //}
+
+//    /**
+//     * 获取测试路线
+//     * @return  Path 路线
+//     */
+//    private fun getTestPath(): Path {
+//        val path = Path()
+//        val points: List<Point> = getRandomPoint()
+//        path.moveTo(100.0f, 100.0f)
+//        //cubicTo（）方法去描述一条三阶贝塞尔曲线
+//        path.cubicTo(
+//            200f,
+//            200f,
+//            500f,
+//            500f,
+//            200f,
+//            1000f
+//        )
+//        return path
+//    }
+
+
+//    //将鱼的图片切割出来
+//    fun getFishAnim(): AnimationDrawable {
+//        val fishBit = BitmapFactory.decodeResource(context!!.resources, R.mipmap.fishs)
+//        fishWidth = fishBit.width / 7
+//        fishHeight = fishBit.height
+//        val anim = AnimationDrawable()
+//        for (i in 0..6) {
+//            val btmap = Bitmap.createBitmap(fishBit, i * fishWidth, 0, fishWidth, fishHeight)
+//            val d: Drawable = BitmapDrawable(context!!.resources, btmap)
+//            anim.addFrame(d, FRAME_INTERVAL)
+//        }
+//        anim.isOneShot = false
+//        return anim
+//    }
+
+//    fun getNextMovePoi(): Point {
+//        progress =
+//            if (progress < 1) progress + SPEED else 1.0
+//
+//        pMeasure!!.getPosTan(
+//            ((pMeasure!!.length * progress).toInt()).toFloat(),
+//            pos,
+//            tan
+//        )
+//
+//        val degrees = (atan2(
+//            tan[1].toDouble(),
+//            tan[0].toDouble()
+//        ) * 180.0 / Math.PI).toFloat()
+//
+//        rotation = degrees
+//
+//        return Point(pos[0].toInt(), pos[1].toInt())
+//    }

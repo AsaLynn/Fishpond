@@ -5,6 +5,8 @@ package com.water.fish
  */
 interface ISeaLayout {
 
+    fun notifyDataSetChanged(position: Int)
+
     /**
      * 数据更新
      */

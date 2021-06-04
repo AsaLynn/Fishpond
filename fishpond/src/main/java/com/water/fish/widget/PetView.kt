@@ -14,6 +14,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.water.fish.FishEntity
 import com.water.fish.PetFish
 import com.water.fish.R
 import com.water.fish.listener.PetAnimatorListenerAdapter
@@ -99,7 +100,7 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
     }
 
     @SuppressLint("Recycle")
-    override fun initMovement(rectF: RectF) {
+    override fun onInitMovement(rectF: RectF) {
         petPathList.clear()
         for (index in 0 until 8) {
             val path = Path()
@@ -157,17 +158,9 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
                 addListener(mPetAnimatorListenerAdapter)
                 interpolator = LinearInterpolator()
                 duration = length
-                /*duration = when (index) {
-                    0 -> 5 * SPEED_MOVE_SECOND
-                    1 -> 4 * SPEED_MOVE_SECOND
-                    2 -> 10 * SPEED_MOVE_SECOND
-                    else -> 10 * SPEED_MOVE_SECOND
-                }*/
             }
             petObjectAnimatorList.add(objectAnimator)
         }
-        mPetAnimatorListenerAdapter.totalPathCount = petPathList.size
-        mPetAnimatorListenerAdapter.animationList = petObjectAnimatorList
     }
 
     override fun moveLeft() {
@@ -216,8 +209,8 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         animation.start()
     }
 
-    override fun onChanged(petFish: PetFish) {
-        mPetFish = petFish
+    override fun onChanged(entity: FishEntity) {
+        mPetFish = entity as PetFish
         mPetFish?.let {
             if (it.moveSpeed > 0) {
                 moveSpeed = it.moveSpeed
@@ -225,6 +218,16 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
             mPetAnimatorListenerAdapter.notifyDataSetChanged()
         }
     }
+
+    /*override fun onChanged(petFish: PetFish) {
+        mPetFish = petFish
+        mPetFish?.let {
+            if (it.moveSpeed > 0) {
+                moveSpeed = it.moveSpeed
+            }
+            mPetAnimatorListenerAdapter.notifyDataSetChanged()
+        }
+    }*/
 
     fun onChanged(pointIndex: Int, petFish: PetFish) {
         mPetFish = petFish

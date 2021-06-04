@@ -6,11 +6,9 @@ import android.widget.Toast
 import com.fishpond.demo.R
 import com.fishpond.demo.base.MyBaseActivity
 import com.fishpond.demo.databinding.ActivityBlueWaterBinding
-import com.fishpond.demo.databinding.ActivitySeaBinding
-import com.fishpond.demo.databinding.ActivitySeafloorBinding
-import com.fishpond.demo.databinding.ActivitySeawaterBinding
 import com.water.fish.PetFish
 import com.water.fish.Shell
+import com.water.fish.ShoalFish
 import com.zxn.mvvm.ext.jumpInTo
 
 class BlueWaterActivity : MyBaseActivity() {
@@ -48,8 +46,15 @@ class BlueWaterActivity : MyBaseActivity() {
         }
     }
 
+    private val mShoalFish by lazy {
+        ShoalFish().apply {
+            //skinResId = R.mipmap.bg_orange_fish_shoal
+            skinResList.add(R.mipmap.bg_orange_fish_shoal)
+        }
+    }
+
     override fun onInitView() {
-        mBinding.fishLayout.setFishData(mutableListOf(petFish,mShell))
+        mBinding.fishLayout.setFishData(mutableListOf(petFish, mShell, mShoalFish))
         mBinding.fishLayout.start()
 
         mBinding.tvStart.setOnClickListener {
@@ -69,6 +74,11 @@ class BlueWaterActivity : MyBaseActivity() {
             DemoActivity.jumpTo(this)
         }
 
+        mBinding.btnFishAdd.setOnClickListener {
+            mShoalFish.skinResList.add(R.mipmap.bg_blue_fish_shoal)
+            mShoalFish.skinResList.add(R.mipmap.bg_clown_fish_shoal)
+        }
+
         mBinding.btnChange.setOnClickListener {
             petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
             mBinding.fishLayout.notifyDataSetChanged()
@@ -78,27 +88,11 @@ class BlueWaterActivity : MyBaseActivity() {
             mBinding.fishLayout.notifyDataSetChanged()
         }
         mBinding.fishLayout.setOnItemClickListener {
-            if (it.id == R.id.ivAIShell){
-                Toast.makeText(this,"click:贝壳!",Toast.LENGTH_SHORT).show()
+            if (it.id == R.id.ivAIShell) {
+                Toast.makeText(this, "click:贝壳!", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
-
-
-//    override fun onResume() {
-//        super.onResume()
-//        mBinding.fishLayout.resume()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        mBinding.fishLayout.pause()
-//    }
-//
-//    //
-//    override fun onRestart() {
-//        super.onRestart()
-//    }
-
 
 }
