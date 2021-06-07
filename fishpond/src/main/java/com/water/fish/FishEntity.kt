@@ -6,7 +6,7 @@ package com.water.fish
  **/
 sealed class FishEntity {
 
-    var moveSpeed = 10L
+    var moveSpeed = 100L
 
     /**
      * 当前鱼的展示状态,初始值向左

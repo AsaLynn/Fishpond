@@ -153,11 +153,11 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
                 }
             }
             mPathMeasure.setPath(path, false)
-            val length = (mPathMeasure.length.toLong() * moveSpeed)
+            val moveDuration = (mPathMeasure.length.toLong() * SPEED_MOVE_SECOND / moveSpeed)
             val objectAnimator = ObjectAnimator.ofFloat(this, View.X, View.Y, path).apply {
                 addListener(mPetAnimatorListenerAdapter)
                 interpolator = LinearInterpolator()
-                duration = length
+                duration = moveDuration
             }
             petObjectAnimatorList.add(objectAnimator)
         }

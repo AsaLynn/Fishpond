@@ -15,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import com.water.fish.FishEntity
 import com.water.fish.ShoalFish
 import com.water.fish.listener.ShoalAnimatorListener
+import com.water.fish.widget.IMarineView.Companion.SPEED_MOVE_SECOND
 import pl.droidsonroids.gif.GifImageView
 import kotlin.math.roundToInt
 
@@ -109,11 +110,11 @@ class ShoalView : GifImageView, IMarineView {
             )
         }
         mPathMeasure.setPath(path, false)
-        val length = (mPathMeasure.length.toLong() * moveSpeed)
+        val moveDuration = (mPathMeasure.length.toLong() * SPEED_MOVE_SECOND / moveSpeed)
         val objectAnimator = ObjectAnimator.ofFloat(this, View.X, View.Y, path).apply {
             addListener(mAnimatorListener)
             interpolator = LinearInterpolator()
-            duration = length
+            duration = moveDuration
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
         }
@@ -143,6 +144,7 @@ class ShoalView : GifImageView, IMarineView {
     override fun onChanged(entity: FishEntity) {
         if (entity is ShoalFish) {
             mShoalFish = entity
+            moveSpeed = entity.moveSpeed
         }
     }
 
