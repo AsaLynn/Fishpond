@@ -103,7 +103,7 @@ class SeaLayout : FrameLayout, View.OnClickListener {
                     ivPetFish.setImageDrawable(holder.turnRightDrawable)
                     postDelayed({
                         it.resume()
-                        ivPetFish.setImageDrawable(if (holder.isSpraying) holder.spurtRightDrawable else holder.moveRightDrawable)
+                        ivPetFish.setImageDrawable(/*if (holder.isSpraying) holder.spurtRightDrawable else */holder.moveRightDrawable)
                     }, turnDuration)
                 }
             }

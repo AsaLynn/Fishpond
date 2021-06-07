@@ -87,7 +87,7 @@ class SeafloorActivity : AppCompatActivity() {
         }
         mBinding.btnSpray.setOnClickListener {
             petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
-            petFish.isSpraying = !petFish.isSpraying
+            //petFish.isSpraying = !petFish.isSpraying
             mBinding.fishLayout.notifyDataSetChanged()
         }
         mBinding.fishLayout.setOnItemClickListener {

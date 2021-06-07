@@ -171,7 +171,7 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
 
     override fun turnRight() {
         mPetFish?.let {
-            ivPetFish.setImageResource(it.turnRightResId)
+            ivPetFish.setImageResource(it.turnRightImageRes())
         }
     }
 
@@ -189,7 +189,7 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
 
     override fun turnLeft() {
         mPetFish?.let {
-            ivPetFish.setImageResource(it.turnLeftResId)
+            ivPetFish.setImageResource(it.turnLeftImageRes())
         }
     }
 
@@ -218,16 +218,6 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
             mPetAnimatorListenerAdapter.notifyDataSetChanged()
         }
     }
-
-    /*override fun onChanged(petFish: PetFish) {
-        mPetFish = petFish
-        mPetFish?.let {
-            if (it.moveSpeed > 0) {
-                moveSpeed = it.moveSpeed
-            }
-            mPetAnimatorListenerAdapter.notifyDataSetChanged()
-        }
-    }*/
 
     fun onChanged(pointIndex: Int, petFish: PetFish) {
         mPetFish = petFish

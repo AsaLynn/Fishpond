@@ -1,8 +1,12 @@
 package com.fishpond.demo
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.fishpond.demo.activity.*
+import com.fishpond.demo.activity.BlueWaterActivity
+import com.fishpond.demo.activity.SeaActivity
+import com.fishpond.demo.activity.SeafloorActivity
+import com.fishpond.demo.activity.SeawaterActivity
 import com.fishpond.demo.databinding.ActivityEnterBinding
 
 /**
@@ -18,7 +22,7 @@ class EnterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
         mBinding.btnA.setOnClickListener {
-            FishpondActivity.jumpTo(this)
+            Toast.makeText(this, "已废弃", Toast.LENGTH_SHORT).show()
         }
         mBinding.btnB.setOnClickListener {
             SeafloorActivity.jumpTo(this)

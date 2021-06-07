@@ -13,9 +13,11 @@ data class PetDrawableHolder(
     var turnRightDrawable: GifDrawable,
     var turnLeftDrawable: GifDrawable,
     var spurtLeftDrawable: GifDrawable,
-    var spurtRightDrawable: GifDrawable,
-    var isSpraying: Boolean
+    var spurtRightDrawable: GifDrawable
 ) {
+
+    val isSpraying = false
+
     companion object {
         fun create(
             res: Resources,
@@ -32,12 +34,12 @@ data class PetDrawableHolder(
                     //loopCount = 1
                 },
                 GifDrawable(res, entity.spurtLeftResId),
-                GifDrawable(res, entity.spurtRightResId),
-                entity.isSpraying
+                GifDrawable(res, entity.spurtRightResId)
             )
     }
 
-    fun toLeftDrawable(): GifDrawable = if (isSpraying) spurtLeftDrawable else moveLeftDrawable
+    fun toLeftDrawable(): GifDrawable = /*if (isSpraying) spurtLeftDrawable else*/ moveLeftDrawable
 
-    fun toRightDrawable(): GifDrawable = if (isSpraying) spurtRightDrawable else moveRightDrawable
+    fun toRightDrawable(): GifDrawable = /*if (isSpraying) spurtRightDrawable else*/
+        moveRightDrawable
 }

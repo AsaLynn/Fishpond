@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.fishpond.demo.R
 import com.fishpond.demo.base.MyBaseActivity
 import com.fishpond.demo.databinding.ActivityBlueWaterBinding
+import com.water.fish.FishStatus
 import com.water.fish.PetFish
 import com.water.fish.Shell
 import com.water.fish.ShoalFish
@@ -36,6 +37,10 @@ class BlueWaterActivity : MyBaseActivity() {
             turnRightResId = R.mipmap.ic_fish_pet_right_turn
             spurtLeftResId = R.mipmap.ic_fish_pet_left_normal_water
             spurtRightResId = R.mipmap.ic_fish_pet_right_normal_water
+            thirstyLeftResId = R.mipmap.ic_fish_pet_left_thirsty
+            thirstyRightResId = R.mipmap.ic_fish_pet_right_thirsty
+            turnLeftResId = R.mipmap.ic_fish_pet_left_turn_thirsty
+            turnRightResId = R.mipmap.ic_fish_pet_right_turn_thirsty
         }
     }
 
@@ -84,11 +89,13 @@ class BlueWaterActivity : MyBaseActivity() {
             mBinding.fishLayout.notifyDataSetChanged()
         }
         mBinding.btnSpray.setOnClickListener {
-            petFish.isSpraying = !petFish.isSpraying
-            mBinding.fishLayout.notifyDataSetChanged()
+            petFish.updateFishStatus(FishStatus.THIRSTY)
+            mBinding.fishLayout.notifyDataSetChanged(0)
         }
         mBinding.fishLayout.setOnItemClickListener {
             if (it.id == R.id.shellView) {
+                petFish.updateFishStatus(FishStatus.NORMAL)
+                mBinding.fishLayout.notifyDataSetChanged(0)
                 Toast.makeText(this, "click:贝壳!", Toast.LENGTH_SHORT).show()
             }
         }
