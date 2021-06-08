@@ -23,7 +23,14 @@ class PetFish : FishEntity() {
     /**
      * 鱼的状态
      */
-    private var fishStatus = FishStatus.NORMAL
+    var fishStatus = FishStatus.NORMAL
+        private set
+
+    /**
+     * 鱼的上一个状态
+     */
+    var lastStatus = FishStatus.NORMAL
+        private set
 
     var tipsList = mutableListOf<String>()
 
@@ -40,6 +47,21 @@ class PetFish : FishEntity() {
 
     var thirstyLeftResId: Int = 0
 
+    /**
+     * 兴奋左移
+     */
+    var gladLeftResId: Int = 0
+
+    /**
+     * 增肥左移
+     */
+    var fatLeftResId: Int = 0
+
+    /**
+     * 变美左移
+     */
+    var prettyLeftResId: Int = 0
+
     var moveRightResId: Int = 0
 
     /**
@@ -48,6 +70,21 @@ class PetFish : FishEntity() {
     var spurtRightResId: Int = 0
 
     var thirstyRightResId: Int = 0
+
+    /**
+     * 兴奋右移
+     */
+    var gladRightResId: Int = 0
+
+    /**
+     * 增肥右移
+     */
+    var fatRightResId: Int = 0
+
+    /**
+     * 变美右移
+     */
+    var prettyRightResId: Int = 0
 
     var turnLeftResId: Int = 0
 
@@ -60,7 +97,6 @@ class PetFish : FishEntity() {
     fun tips(): String? {
         if (tipsList.isEmpty()) return null
         tipsList.shuffled().take(1)[0].also {
-            //val mStringBuilder = StringBuilder()
             mStringBuilder.clear()
             return when (it.length) {
                 in 0..7 -> it
@@ -77,10 +113,14 @@ class PetFish : FishEntity() {
     }
 
     fun updateFishStatus(@FishStatus status: Int) {
+        this.lastStatus = fishStatus
         this.fishStatus = status
     }
 
     fun toLeftImageRes(): Int = when (fishStatus) {
+        FishStatus.BEAUTIFY -> prettyLeftResId
+        FishStatus.FLESH_UP -> fatLeftResId
+        FishStatus.EXCITING -> gladLeftResId
         FishStatus.THIRSTY -> thirstyLeftResId
         FishStatus.SPRAY -> spurtLeftResId
         FishStatus.NORMAL -> moveLeftResId
@@ -88,6 +128,9 @@ class PetFish : FishEntity() {
     }
 
     fun toRightImageRes(): Int = when (fishStatus) {
+        FishStatus.BEAUTIFY -> prettyRightResId
+        FishStatus.FLESH_UP -> fatRightResId
+        FishStatus.EXCITING -> gladRightResId
         FishStatus.THIRSTY -> thirstyRightResId
         FishStatus.SPRAY -> spurtRightResId
         FishStatus.NORMAL -> moveRightResId

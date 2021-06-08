@@ -13,6 +13,9 @@ import java.lang.annotation.RetentionPolicy;
  * 鱼儿的状态
  */
 @IntDef({
+        FishStatus.BEAUTIFY,
+        FishStatus.FLESH_UP,
+        FishStatus.EXCITING,
         FishStatus.THIRSTY,
         FishStatus.SPRAY,
         FishStatus.NORMAL,
@@ -35,6 +38,33 @@ public @interface FishStatus {
      */
     int THIRSTY = 14;
 
+    /**
+     * 水平向左正常游动
+     */
+    int MOVE_LEFT = 2;
+
+    /**
+     * 水平向右正常游动
+     */
+    int MOVE_RIGHT = 3;
+
+    /**
+     * 兴奋瞬间
+     */
+    int EXCITING = 15;
+
+    /**
+     * 增肥瞬间
+     */
+    int FLESH_UP = 16;
+
+    /**
+     *  变美瞬间
+     */
+    int BEAUTIFY = 17;
+}
+
+
 //    /**
 //     * 休息.
 //     */
@@ -47,15 +77,6 @@ public @interface FishStatus {
 //     * 向右转
 //     */
 //    int TURN_RIGHT = 1;
-
-    /**
-     * 水平向左正常游动
-     */
-    int MOVE_LEFT = 2;
-    /**
-     * 水平向右正常游动
-     */
-    int MOVE_RIGHT = 3;
 
 //    /**
 //     * 面向右边垂直向下游动
@@ -90,7 +111,6 @@ public @interface FishStatus {
 //     */
 //    int MOVE_TOP_ON_LEFT = 11;
 
-}
 
 
         /*FishStatus.MOVE_BOTTOM_ON_LEFT,

@@ -15,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.water.fish.FishEntity
+import com.water.fish.FishStatus
 import com.water.fish.PetFish
 import com.water.fish.R
 import com.water.fish.listener.PetAnimatorListenerAdapter
@@ -93,6 +94,8 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
 
     override var moveSpeed = 10L
 
+    private val mRecoverDelayMillis = 2 * SPEED_MOVE_SECOND
+
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
         Log.i(TAG, "onWindowFocusChanged: $hasWindowFocus")
@@ -169,6 +172,12 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         }
     }
 
+    override fun moveRight() {
+        mPetFish?.let {
+            ivPetFish.setImageResource(it.toRightImageRes())
+        }
+    }
+
     override fun turnRight() {
         mPetFish?.let {
             ivPetFish.setImageResource(it.turnRightImageRes())
@@ -179,12 +188,6 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         turnRight()
         nextAnimator.startDelay = turnDuration
         nextAnimator.start()
-    }
-
-    override fun moveRight() {
-        mPetFish?.let {
-            ivPetFish.setImageResource(it.toRightImageRes())
-        }
     }
 
     override fun turnLeft() {
@@ -214,6 +217,14 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         mPetFish?.let {
             if (it.moveSpeed > 0) {
                 moveSpeed = it.moveSpeed
+            }
+            when (it.fishStatus) {
+                FishStatus.EXCITING, FishStatus.FLESH_UP, FishStatus.BEAUTIFY -> {
+                    postDelayed({
+                        it.updateFishStatus(it.lastStatus)
+                        mPetAnimatorListenerAdapter.notifyDataSetChanged()
+                    }, mRecoverDelayMillis)
+                }
             }
             mPetAnimatorListenerAdapter.notifyDataSetChanged()
         }
