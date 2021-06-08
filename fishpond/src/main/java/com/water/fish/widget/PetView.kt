@@ -94,8 +94,6 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
 
     override var moveSpeed = 10L
 
-    private val mRecoverDelayMillis = 2 * SPEED_MOVE_SECOND
-
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
         Log.i(TAG, "onWindowFocusChanged: $hasWindowFocus")
@@ -223,7 +221,7 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
                     postDelayed({
                         it.updateFishStatus(it.lastStatus)
                         mPetAnimatorListenerAdapter.notifyDataSetChanged()
-                    }, mRecoverDelayMillis)
+                    }, it.recoverDelayMillis)
                 }
             }
             mPetAnimatorListenerAdapter.notifyDataSetChanged()

@@ -20,6 +20,8 @@ sealed class FishEntity {
  */
 class PetFish : FishEntity() {
 
+    var recoverDelayMillis = 3000L
+
     /**
      * 鱼的状态
      */
