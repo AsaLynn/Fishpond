@@ -1,5 +1,6 @@
 package com.fishpond.demo.base
 
+import android.view.View
 import com.zxn.mvvm.view.BaseActivity
 
 /**
@@ -8,6 +9,8 @@ import com.zxn.mvvm.view.BaseActivity
 abstract class MyBaseActivity :BaseActivity(){
 
     override val layoutResId: Int = 0
+
+    override fun onCreateRootView(): View? = null
 
     override fun createObserver() {
 

@@ -25,12 +25,17 @@ class BlueWaterActivity : MyBaseActivity() {
         ActivityBlueWaterBinding.inflate(layoutInflater)
     }
 
-    override val layoutRoot: View by lazy {
-        mBinding.root
-    }
+    override fun onCreateRootView(): View = mBinding.root
+
+//    override val layoutRoot: View by lazy {
+//        mBinding.root
+//    }
 
     private val petFish by lazy {
         PetFish().apply {
+
+            moveSpeed = 50
+
             moveLeftResId = R.mipmap.ic_fish_pet_left_normal
             moveRightResId = R.mipmap.ic_fish_pet_right_normal
             turnLeftResId = R.mipmap.ic_fish_pet_left_turn
@@ -41,6 +46,15 @@ class BlueWaterActivity : MyBaseActivity() {
             thirstyRightResId = R.mipmap.ic_fish_pet_right_thirsty
             turnLeftResId = R.mipmap.ic_fish_pet_left_turn_thirsty
             turnRightResId = R.mipmap.ic_fish_pet_right_turn_thirsty
+
+            gladLeftResId = R.mipmap.ic_fish_pet_left_normal_glad
+            gladRightResId = R.mipmap.ic_fish_pet_right_normal_glad
+
+            fatLeftResId = R.mipmap.ic_fish_pet_left_normal_fat
+            fatRightResId = R.mipmap.ic_fish_pet_right_normal_fat
+
+            prettyLeftResId = R.mipmap.ic_fish_pet_left_normal_pretty
+            prettyRightResId = R.mipmap.ic_fish_pet_right_normal_pretty
         }
     }
 
@@ -92,6 +106,15 @@ class BlueWaterActivity : MyBaseActivity() {
             petFish.updateFishStatus(FishStatus.THIRSTY)
             mBinding.fishLayout.notifyDataSetChanged(0)
         }
+        mBinding.btnShort.setOnClickListener {
+            status++
+            when (status % 3) {
+                0 -> petFish.updateFishStatus(FishStatus.EXCITING)
+                1 -> petFish.updateFishStatus(FishStatus.FLESH_UP)
+                2 -> petFish.updateFishStatus(FishStatus.BEAUTIFY)
+            }
+            mBinding.fishLayout.notifyDataSetChanged(0)
+        }
         mBinding.fishLayout.setOnItemClickListener {
             if (it.id == R.id.shellView) {
                 petFish.updateFishStatus(FishStatus.NORMAL)
@@ -102,4 +125,5 @@ class BlueWaterActivity : MyBaseActivity() {
 
     }
 
+    private var status: Int = 0
 }

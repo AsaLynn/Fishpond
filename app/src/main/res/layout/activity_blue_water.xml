@@ -91,6 +91,17 @@
         app:layout_constraintLeft_toRightOf="@id/btnFastA"
         app:layout_constraintTop_toBottomOf="@id/btnOpen" />
 
+    <Button
+        android:id="@+id/btnShort"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="变化"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnFishAdd"
+        app:layout_constraintTop_toBottomOf="@id/btnOpen" />
 
     <TextView
         android:id="@+id/tvStart"
