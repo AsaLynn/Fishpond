@@ -15,8 +15,8 @@
 
     <com.water.fish.widget.ShoalView
         android:id="@+id/shoalView"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
         android:layout_alignTop="@id/clShellLayout"
         android:layout_marginBottom="30dp"
         android:visibility="visible"

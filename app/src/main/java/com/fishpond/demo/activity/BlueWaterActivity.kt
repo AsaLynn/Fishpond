@@ -68,7 +68,9 @@ class BlueWaterActivity : MyBaseActivity() {
     private val mShoalFish by lazy {
         ShoalFish().apply {
             //skinResId = R.mipmap.bg_orange_fish_shoal
-            skinResList.add(R.mipmap.bg_orange_fish_shoal)
+            //skinResList.add(R.mipmap.bg_orange_fish_shoal)
+            skinResList.add(R.mipmap.bg_blue_fish_shoal)
+            moveSpeed = 150
         }
     }
 

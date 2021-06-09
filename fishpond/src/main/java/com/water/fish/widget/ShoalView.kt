@@ -46,8 +46,7 @@ class ShoalView : GifImageView, IMarineView {
     ) {
         setWillNotDraw(false)
         isClickable = false
-        //setBackgroundColor(Color.WHITE)
-        //setImageResource(R.mipmap.bg_fish_tips)
+        scaleType = ScaleType.FIT_XY
     }
 
     private var mShoalFish: ShoalFish? = null
@@ -58,13 +57,13 @@ class ShoalView : GifImageView, IMarineView {
     var mCrestHeight: Float = 80f
 
     //波峰长度
-    var mCrestWidth: Int = 200
+    private var mCrestWidth: Int = 200
 
     //波起始点
-    var mStartPoint: Float = 0f
+    private var mStartPoint: Float = 0f
 
     //隐藏一个波长
-    var mLeftHide: Float = 0f
+    private var mLeftHide: Float = 0f
 
     private val mPathMeasure = PathMeasure()
 
@@ -78,18 +77,27 @@ class ShoalView : GifImageView, IMarineView {
     override fun onInitMovement(rectF: RectF) {
         pointList.clear()
         rectF.run {
+            val shoalWidth = measuredWidth
             //底部开始
             mStartPoint = rectF.centerY() - measuredHeight / 2
             //波峰高度
             mCrestHeight = rectF.height() / 2F
             //波峰长度
+            //mCrestWidth = rectF.width().toInt() / 2
             mCrestWidth = rectF.width().toInt() / 2
             //隐藏一个波长
             mLeftHide = -mCrestWidth.toFloat()
             //几个波峰
             val n = (rectF.width() / mCrestWidth + 0.5).roundToInt()
-            for (i in 0..n * 4 + 4) {
-                val x = (i * mCrestWidth / 4).toFloat() - mCrestWidth
+            //val size = n * 4 + 4
+            //val size = n * 4
+            val size = n * 2
+            for (i in 0..size) {
+                //val x = (i * mCrestWidth / 4).toFloat() - mCrestWidth
+                //val x = (i * mCrestWidth / 4).toFloat() - mCrestWidth / 4
+                //val x = if (size - 1 == i) (i * mCrestWidth / 4).toFloat() - mCrestWidth else (i * mCrestWidth / 4).toFloat() - mCrestWidth / 2
+                //val x = (i * mCrestWidth / 4).toFloat() - mCrestWidth / 2
+                val x = (i * mCrestWidth / 2).toFloat() - mCrestWidth / 2
                 var y = 0f
                 when (i % 4) {
                     0, 2 -> y = mStartPoint
@@ -105,8 +113,7 @@ class ShoalView : GifImageView, IMarineView {
         for (i in 0..(pointList.size - 3) step 2) {
             path.quadTo(
                 pointList[i + 1].x, pointList[i + 1].y,
-                pointList[i + 2].x,
-                pointList[i + 2].y
+                pointList[i + 2].x, pointList[i + 2].y
             )
         }
         mPathMeasure.setPath(path, false)
