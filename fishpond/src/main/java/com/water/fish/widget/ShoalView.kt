@@ -132,14 +132,18 @@ class ShoalView : GifImageView, IMarineView {
         Log.i(TAG, "turnLeft: ")
         //rotation = 360F
         rotationY = 180F
-        moveLeft()
+        mShoalFish?.let {
+            setImageResource(it.shuffledSkinResId())
+        }
     }
 
     override fun turnRight(nextAnimator: Animator) {
         Log.i(TAG, "turnRight: ")
         //rotation = 180F
         rotationY = 360F
-        moveRight()
+        mShoalFish?.let {
+            setImageResource(it.shuffledSkinResId())
+        }
     }
 
     override fun start(nextAnimator: Animator) {
@@ -160,30 +164,13 @@ class ShoalView : GifImageView, IMarineView {
         mAnimatorListener.onWindowFocusChanged(hasWindowFocus)
     }
 
-    override fun moveLeft() {
-        mShoalFish?.let {
-            setImageResource(it.shuffledSkinResId())
-        }
-    }
-
-    override fun turnRight() {
-
-    }
-
-    override fun moveRight() {
-        mShoalFish?.let {
-            setImageResource(it.shuffledSkinResId())
-        }
-    }
-
-    override fun turnLeft() {
-
-    }
-
-    override fun rest(position: Int, nextAnimator: Animator) {
-
-    }
-
+//    override fun moveLeft() {
+//
+//    }
+//
+//    override fun moveRight() {
+//
+//    }
 
 }
 

@@ -9,9 +9,7 @@ import com.fishpond.demo.base.MyBaseActivity
 import com.fishpond.demo.databinding.ActivityMainBinding
 import com.fishpond.demo.fragment.BlankAFragment
 import com.fishpond.demo.fragment.BlankBFragment
-import com.fishpond.demo.fragment.SeaFragment
 import com.zxn.mvvm.ext.jumpInTo
-import com.zxn.mvvm.view.BaseActivity
 import com.zxn.tablayout.listener.CustomTabEntity
 import com.zxn.tablayout.listener.OnTabSelectListener
 
@@ -56,7 +54,6 @@ class MainActivity : MyBaseActivity() {
             (this@MainActivity as FragmentActivity),
             R.id.flContainer,
             mutableListOf(
-                SeaFragment.newInstance(),
                 BlankAFragment.newInstance(),
                 BlankBFragment.newInstance(),
             )

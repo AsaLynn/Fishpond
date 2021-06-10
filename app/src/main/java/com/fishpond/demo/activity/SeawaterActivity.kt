@@ -4,8 +4,6 @@ import android.content.Context
 import android.view.View
 import com.fishpond.demo.R
 import com.fishpond.demo.base.MyBaseActivity
-import com.fishpond.demo.databinding.ActivitySeaBinding
-import com.fishpond.demo.databinding.ActivitySeafloorBinding
 import com.fishpond.demo.databinding.ActivitySeawaterBinding
 import com.water.fish.PetFish
 import com.water.fish.Shell

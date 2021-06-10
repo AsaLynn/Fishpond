@@ -18,7 +18,7 @@ import com.water.fish.FishEntity
 import com.water.fish.FishStatus
 import com.water.fish.PetFish
 import com.water.fish.R
-import com.water.fish.listener.PetAnimatorListenerAdapter
+import com.water.fish.listener.PetAnimatorAdapter
 import com.water.fish.widget.IMarineView.Companion.SPEED_MOVE_SECOND
 import pl.droidsonroids.gif.GifImageView
 
@@ -27,7 +27,7 @@ import pl.droidsonroids.gif.GifImageView
  *  鱼宠View.
  *  Created by zxn on 2021/6/1.
  **/
-class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
+class PetView : ConstraintLayout, View.OnClickListener, IWhaleView {
 
     companion object {
         private const val TAG = "PetView"
@@ -75,15 +75,15 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
      */
     private val petPathList = mutableListOf<Path>()
 
-    private val petObjectAnimatorList = mutableListOf<Animator>()
+    private val petAnimatorList = mutableListOf<Animator>()
 
-    private val mPetAnimatorListenerAdapter =
-        PetAnimatorListenerAdapter(this, petObjectAnimatorList)
+    private val mPetAnimatorAdapter =
+        PetAnimatorAdapter(this, petAnimatorList)
 
     /**
      * 休息的秒数
      */
-    var restDuration = 2
+    private var restDuration = 2
 
     /**
      * 转身持续时间.turnDuration
@@ -97,7 +97,7 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
         Log.i(TAG, "onWindowFocusChanged: $hasWindowFocus")
-        mPetAnimatorListenerAdapter.onWindowFocusChanged(hasWindowFocus)
+        mPetAnimatorAdapter.onWindowFocusChanged(hasWindowFocus)
     }
 
     @SuppressLint("Recycle")
@@ -156,11 +156,11 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
             mPathMeasure.setPath(path, false)
             val moveDuration = (mPathMeasure.length.toLong() * SPEED_MOVE_SECOND / moveSpeed)
             val objectAnimator = ObjectAnimator.ofFloat(this, View.X, View.Y, path).apply {
-                addListener(mPetAnimatorListenerAdapter)
+                addListener(mPetAnimatorAdapter)
                 interpolator = LinearInterpolator()
                 duration = moveDuration
             }
-            petObjectAnimatorList.add(objectAnimator)
+            petAnimatorList.add(objectAnimator)
         }
     }
 
@@ -176,28 +176,33 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         }
     }
 
-    override fun turnRight() {
-        mPetFish?.let {
-            ivPetFish.setImageResource(it.turnRightImageRes())
-        }
+    override fun pause(animation: Animator) {
+        animation.pause()
+    }
+
+    override fun resume(animation: Animator) {
+        animation.resume()
     }
 
     override fun turnRight(nextAnimator: Animator) {
-        turnRight()
+        mPetFish?.let {
+            ivPetFish.setImageResource(it.turnRightImageRes())
+        }
         nextAnimator.startDelay = turnDuration
         nextAnimator.start()
-    }
-
-    override fun turnLeft() {
-        mPetFish?.let {
-            ivPetFish.setImageResource(it.turnLeftImageRes())
-        }
     }
 
     override fun turnLeft(nextAnimator: Animator) {
-        turnLeft()
+        mPetFish?.let {
+            ivPetFish.setImageResource(it.turnLeftImageRes())
+        }
         nextAnimator.startDelay = turnDuration
         nextAnimator.start()
+    }
+
+    override fun travel() {
+        mPetAnimatorAdapter.end()
+        visibility = View.GONE
     }
 
     override fun rest(position: Int, nextAnimator: Animator) {
@@ -205,9 +210,11 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
         nextAnimator.start()
     }
 
-    override fun start(animation: Animator) {
-        animation.startDelay = turnDuration
-        animation.start()
+    override fun start(nextAnimator: Animator) {
+        if (!nextAnimator.isStarted && !nextAnimator.isRunning) {
+            nextAnimator.startDelay = turnDuration
+            nextAnimator.start()
+        }
     }
 
     override fun onChanged(entity: FishEntity) {
@@ -218,25 +225,20 @@ class PetView : ConstraintLayout, View.OnClickListener, IMarineView {
             }
             when (it.fishStatus) {
                 FishStatus.EXCITING, FishStatus.FLESH_UP, FishStatus.BEAUTIFY -> {
+                    if (visibility != View.VISIBLE) visibility = VISIBLE
                     postDelayed({
                         it.updateFishStatus(it.lastStatus)
-                        mPetAnimatorListenerAdapter.notifyDataSetChanged()
+                        mPetAnimatorAdapter.notifyDataSetChanged()
                     }, it.recoverDelayMillis)
+                    mPetAnimatorAdapter.notifyDataSetChanged()
                 }
-            }
-            mPetAnimatorListenerAdapter.notifyDataSetChanged()
-        }
-    }
-
-    fun onChanged(pointIndex: Int, petFish: PetFish) {
-        mPetFish = petFish
-        mPetFish?.let {
-            when (pointIndex) {
-                0, 1, 5, 7, 8, 9, 10, 12 -> {
-                    ivPetFish.setImageResource(it.toLeftImageRes())
+                FishStatus.TRAVEL -> {
+                    travel()
                 }
-                2, 3, 4, 6, 11 -> {
-                    ivPetFish.setImageResource(it.toRightImageRes())
+                else -> {
+                    if (visibility != View.VISIBLE) visibility = VISIBLE
+                    mPetAnimatorAdapter.notifyDataSetChanged()
+                    mPetAnimatorAdapter.restart()
                 }
             }
         }

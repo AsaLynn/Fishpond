@@ -2,14 +2,13 @@ package com.water.fish.listener
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.util.Log
 import com.water.fish.widget.IMarineView
 
 /**
  *  Created by zxn on 2021/6/2.
  **/
-abstract class BaseAnimatorListenerAdapter(
-    val marineView: IMarineView,
+abstract class BaseAnimatorListenerAdapter<T : IMarineView>(
+    val marineView: T,
     var animationList: List<Animator>
 ) : AnimatorListenerAdapter() {
 
@@ -17,7 +16,7 @@ abstract class BaseAnimatorListenerAdapter(
      * 当前移动的路线索引.
      */
     var currentPathIndex: Int = 0
-        private set
+        protected set
 
     override fun onAnimationStart(animation: Animator) {
         onAnimationStart(animation, currentPathIndex, marineView)
@@ -30,22 +29,18 @@ abstract class BaseAnimatorListenerAdapter(
     }
 
     override fun onAnimationRepeat(animation: Animator) {
-        onAnimationRepeat(animation,currentPathIndex,marineView)
+        onAnimationRepeat(animation, currentPathIndex, marineView)
     }
 
-    override fun onAnimationPause(animation: Animator) {
+    abstract fun onAnimationStart(animation: Animator, position: Int, marineView: T)
 
-    }
+    abstract fun onAnimationEnd(animation: Animator, position: Int, marineView: T)
 
-    override fun onAnimationResume(animation: Animator) {
-
-    }
-
-    abstract fun onAnimationStart(animation: Animator, position: Int, marineView: IMarineView)
-
-    abstract fun onAnimationEnd(animation: Animator, position: Int, marineView: IMarineView)
-
-    abstract fun onAnimationRepeat(animation: Animator, position: Int, marineView: IMarineView)
+    abstract fun onAnimationRepeat(animation: Animator, position: Int, marineView: T)
 
     abstract fun onWindowFocusChanged(hasWindowFocus: Boolean)
+
+    abstract fun start()
+
+    abstract fun end()
 }

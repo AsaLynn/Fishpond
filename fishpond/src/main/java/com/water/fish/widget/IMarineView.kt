@@ -19,17 +19,27 @@ interface IMarineView {
      */
     fun onInitMovement(rectF: RectF)
 
-    fun moveLeft()
-
-    fun turnRight()
+    var moveSpeed: Long
 
     fun turnRight(nextAnimator: Animator)
 
-    fun moveRight()
-
-    fun turnLeft()
-
     fun turnLeft(nextAnimator: Animator)
+
+    /**
+     *开始游动.
+     */
+    fun start(nextAnimator: Animator)
+
+    fun onChanged(entity: FishEntity)
+
+}
+
+interface IWhaleView : IMarineView {
+
+    /**
+     * 旅行
+     */
+    fun travel()
 
     /**
      * 在当前动画路线休息逗留.
@@ -38,13 +48,12 @@ interface IMarineView {
      */
     fun rest(position: Int, nextAnimator: Animator)
 
-    /**
-     *开始游动.
-     */
-    fun start(nextAnimator: Animator)
+    fun moveLeft()
 
-    fun  onChanged(entity: FishEntity)
+    fun moveRight()
 
-    var moveSpeed: Long
+    fun pause(animation: Animator)
+
+    fun resume(animation: Animator)
 
 }

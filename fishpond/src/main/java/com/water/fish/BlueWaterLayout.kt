@@ -137,6 +137,7 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
             1 -> shellView.onChanged(fishEntityList[1])
             2 -> shoalView.onChanged(fishEntityList[2])
         }
+
     }
 
 

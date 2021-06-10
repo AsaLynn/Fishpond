@@ -13,6 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  * 鱼儿的状态
  */
 @IntDef({
+        FishStatus.TRAVEL,
         FishStatus.BEAUTIFY,
         FishStatus.FLESH_UP,
         FishStatus.EXCITING,
@@ -59,9 +60,14 @@ public @interface FishStatus {
     int FLESH_UP = 16;
 
     /**
-     *  变美瞬间
+     * 变美瞬间
      */
     int BEAUTIFY = 17;
+
+    /**
+     * 外出旅行
+     */
+    int TRAVEL = 18;
 }
 
 
@@ -110,8 +116,6 @@ public @interface FishStatus {
 //     * 面向左边垂直向上游动
 //     */
 //    int MOVE_TOP_ON_LEFT = 11;
-
-
 
         /*FishStatus.MOVE_BOTTOM_ON_LEFT,
         FishStatus.MOVE_TOP_ON_LEFT,

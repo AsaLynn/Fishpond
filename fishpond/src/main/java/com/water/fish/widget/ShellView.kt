@@ -41,33 +41,18 @@ class ShellView : ConstraintLayout, IMarineView {
 
     }
 
-    override fun moveLeft() {
 
-    }
-
-    override fun turnRight() {
-
-    }
 
     override fun turnRight(nextAnimator: Animator) {
 
     }
 
-    override fun moveRight() {
 
-    }
-
-    override fun turnLeft() {
-
-    }
 
     override fun turnLeft(nextAnimator: Animator) {
 
     }
 
-    override fun rest(position: Int, nextAnimator: Animator) {
-
-    }
 
     override fun start(nextAnimator: Animator) {
 

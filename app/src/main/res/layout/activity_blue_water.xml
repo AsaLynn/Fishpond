@@ -103,14 +103,26 @@
         app:layout_constraintLeft_toRightOf="@id/btnFishAdd"
         app:layout_constraintTop_toBottomOf="@id/btnOpen" />
 
+    <Button
+        android:id="@+id/btnTravel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="旅行"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/btnShort"
+        app:layout_constraintTop_toBottomOf="@id/btnOpen" />
+
     <TextView
         android:id="@+id/tvStart"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_height="@dimen/dp_50"
         android:gravity="center"
         android:text="开始"
         android:textColor="#00c0c4"
-        android:textSize="@dimen/sp_10"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -119,11 +131,11 @@
     <TextView
         android:id="@+id/tvPause"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_height="@dimen/dp_50"
         android:gravity="center"
         android:text="暂停"
         android:textColor="#00c0c4"
-        android:textSize="@dimen/sp_10"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/tvStart"
@@ -132,11 +144,11 @@
     <TextView
         android:id="@+id/tvResume"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_height="@dimen/dp_50"
         android:gravity="center"
         android:text="继续"
         android:textColor="#00c0c4"
-        android:textSize="@dimen/sp_10"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/tvPause"
@@ -145,11 +157,11 @@
     <TextView
         android:id="@+id/tvEnd"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_height="@dimen/dp_50"
         android:gravity="center"
         android:text="结束"
         android:textColor="#00c0c4"
-        android:textSize="@dimen/sp_10"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/tvResume"
@@ -163,7 +175,7 @@
         android:background="#00c0c4"
         app:layout_constraintBottom_toTopOf="@id/tvStart"
         app:layout_constraintTop_toBottomOf="@id/titleView"
-        app:paddingPetAreaLeft="@dimen/dp_40" />
+        app:paddingPetAreaLeft="@dimen/dp_50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

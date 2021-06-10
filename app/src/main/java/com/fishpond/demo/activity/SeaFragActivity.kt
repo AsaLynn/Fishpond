@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.fishpond.demo.databinding.ActivityEnterBinding.inflate
 import com.fishpond.demo.fragment.BlankAFragment
 import com.fishpond.demo.fragment.BlankBFragment
-import com.fishpond.demo.fragment.SeaFragment
 
 class SeaFragActivity : AppCompatActivity() {
 
@@ -22,16 +21,10 @@ class SeaFragActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_sea_frag)
 
-        val newInstance = SeaFragment.newInstance()
         val newInstance1 = BlankAFragment.newInstance()
         val newInstance2 = BlankBFragment.newInstance()
         inflate(layoutInflater).also {
             setContentView(it.root)
-            supportFragmentManager.beginTransaction()
-                .add(android.R.id.content, newInstance)
-                .hide(newInstance)
-                .commitAllowingStateLoss()
-
             supportFragmentManager.beginTransaction()
                 .add(android.R.id.content, newInstance1)
                 .hide(newInstance1)
@@ -42,7 +35,6 @@ class SeaFragActivity : AppCompatActivity() {
                 .hide(newInstance2)
                 .commitAllowingStateLoss()
 
-            supportFragmentManager.beginTransaction().show(newInstance).commitAllowingStateLoss()
             supportFragmentManager.beginTransaction().hide(newInstance1).commitAllowingStateLoss()
             supportFragmentManager.beginTransaction().hide(newInstance2).commitAllowingStateLoss()
         }

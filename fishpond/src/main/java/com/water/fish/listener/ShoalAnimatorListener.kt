@@ -8,7 +8,7 @@ import com.water.fish.widget.IMarineView
  *  Created by zxn on 2021/6/4.
  **/
 class ShoalAnimatorListener(view: IMarineView, animationList: List<Animator>) :
-    BaseAnimatorListenerAdapter(view, animationList) {
+    BaseAnimatorListenerAdapter<IMarineView>(view, animationList) {
 
     companion object {
         private const val TAG = "ShoalAnimatorListener"
@@ -50,6 +50,14 @@ class ShoalAnimatorListener(view: IMarineView, animationList: List<Animator>) :
                 }
             }
         }
+    }
+
+    override fun start() {
+
+    }
+
+    override fun end() {
+
     }
 
 }
