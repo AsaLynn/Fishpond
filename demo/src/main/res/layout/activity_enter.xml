@@ -58,5 +58,17 @@
         android:textSize="@dimen/sp_15"
         app:layout_constraintTop_toBottomOf="@id/btnD" />
 
+    <Button
+        android:id="@+id/btnF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/colorPrimaryDark"
+        android:text="Ball"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        app:layout_constraintTop_toBottomOf="@id/btnE" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

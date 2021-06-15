@@ -27,10 +27,6 @@ class BlueWaterActivity : MyBaseActivity() {
 
     override fun onCreateRootView(): View = mBinding.root
 
-//    override val layoutRoot: View by lazy {
-//        mBinding.root
-//    }
-
     private val petFish by lazy {
         PetFish().apply {
 

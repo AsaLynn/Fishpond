@@ -3,6 +3,7 @@ package com.fishpond.demo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.fishpond.demo.activity.BallActivity
 import com.fishpond.demo.activity.BlueWaterActivity
 import com.fishpond.demo.activity.SeaActivity
 import com.fishpond.demo.activity.SeawaterActivity
@@ -35,7 +36,10 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnE.setOnClickListener {
             BlueWaterActivity.jumpTo(this)
         }
-        BlueWaterActivity.jumpTo(this)
+        mBinding.btnF.setOnClickListener {
+            BallActivity.jumpTo(this)
+        }
+        BallActivity.jumpTo(this)
     }
 
 }
