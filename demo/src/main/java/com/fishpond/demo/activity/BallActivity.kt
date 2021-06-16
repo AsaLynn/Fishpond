@@ -1,37 +1,45 @@
 package com.fishpond.demo.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.hardware.SensorManager
-import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.Window
-import android.view.WindowManager
-import com.water.ball.WaterBallView
+import android.util.Log
+import android.view.View
+import com.fishpond.demo.R
+import com.fishpond.demo.base.MyBaseActivity
+import com.fishpond.demo.databinding.ActivityBallBinding
+import com.fishpond.demo.fragment.BlankAFragment
 
 /**
  * Ball
  * BallActivity.
  */
-class BallActivity : Activity() {
+class BallActivity : MyBaseActivity() {
 
     companion object {
         @JvmStatic
         fun jumpTo(context: Context) {
             context.startActivity(Intent(context, BallActivity::class.java))
         }
+
+        private const val TAG = "BallActivity"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private val mBinding by lazy {
+        ActivityBallBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateRootView(): View = mBinding.root
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //没有titlebar，全屏显示
+        //全屏显示
         requestWindowFeature(Window.FEATURE_NO_TITLE) //隐藏标题
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
         //设置全屏
         //保持屏幕竖屏
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -41,12 +49,45 @@ class BallActivity : Activity() {
         myManager.defaultDisplay.getMetrics(mymeMetrics)
         val width = mymeMetrics.widthPixels
         val height = mymeMetrics.heightPixels - 125
-        val myview = WaterBallView(
-            this,
-            sensorManager,
-            width,
-            height
+
+        val view = WaterBallView(
+            *//*width,
+            height,*//*
+            this
         )
-        setContentView(myview)
+        setContentView(view)
+        view.start()
+    }*/
+
+    private val frag by lazy {
+        BlankAFragment.newInstance()
     }
+
+    override fun onInitView() {
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.flContainer, frag)
+            .commitAllowingStateLoss()
+
+        mBinding.run {
+
+
+            btnBegin.setOnClickListener {
+                Log.i(TAG, "btnBegin: ")
+                /*supportFragmentManager.beginTransaction()
+                    .replace(R.id.flContainer, frag)
+                    .commitAllowingStateLoss()*/
+            }
+
+            btnStop.setOnClickListener {
+                Log.i(TAG, "btnStop: ")
+                /*supportFragmentManager.beginTransaction()
+                    .remove(frag)
+                    .commitAllowingStateLoss()*/
+            }
+
+        }
+    }
+
+
 }

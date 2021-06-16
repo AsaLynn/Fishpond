@@ -73,71 +73,77 @@ class BlueWaterActivity : MyBaseActivity() {
     }
 
     override fun onInitView() {
-        mBinding.fishLayout.setFishData(mutableListOf(petFish, mShell, mShoalFish))
-        mBinding.fishLayout.start()
+        mBinding.run {
+            waterBallView.decodeBallResource(R.mipmap.ic_bottle_ping_big)
+            waterBallView.visibility = View.GONE
 
-        mBinding.tvStart.setOnClickListener {
-            mBinding.fishLayout.restart()
-        }
-        mBinding.tvPause.setOnClickListener {
-            mBinding.fishLayout.pause()
-        }
-        mBinding.tvResume.setOnClickListener {
-            mBinding.fishLayout.resume()
-        }
-        mBinding.tvEnd.setOnClickListener {
-            mBinding.fishLayout.end()
-        }
+            mBinding.fishLayout.setFishData(mutableListOf(petFish, mShell, mShoalFish))
+            mBinding.fishLayout.start()
 
-        mBinding.btnOpen.setOnClickListener {
-            DemoActivity.jumpTo(this)
-        }
-
-        mBinding.btnFishAdd.setOnClickListener {
-            mShoalFish.skinResList.add(R.mipmap.bg_blue_fish_shoal)
-            mShoalFish.skinResList.add(R.mipmap.bg_clown_fish_shoal)
-        }
-
-        mBinding.btnChange.setOnClickListener {
-            petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
-            mBinding.fishLayout.notifyDataSetChanged()
-        }
-        mBinding.btnSpray.setOnClickListener {
-            petFish.updateFishStatus(FishStatus.THIRSTY)
-            mBinding.fishLayout.notifyDataSetChanged(0)
-        }
-        mBinding.btnShort.setOnClickListener {
-            status++
-            when (status % 3) {
-                0 -> petFish.updateFishStatus(FishStatus.EXCITING)
-                1 -> petFish.updateFishStatus(FishStatus.FLESH_UP)
-                2 -> petFish.updateFishStatus(FishStatus.BEAUTIFY)
+            mBinding.tvStart.setOnClickListener {
+                mBinding.fishLayout.restart()
             }
-            mBinding.fishLayout.notifyDataSetChanged(0)
-        }
-        mBinding.fishLayout.setOnItemClickListener {
-            if (it.id == R.id.shellView) {
-                petFish.updateFishStatus(FishStatus.NORMAL)
+            mBinding.tvPause.setOnClickListener {
+                mBinding.fishLayout.pause()
+            }
+            mBinding.tvResume.setOnClickListener {
+                mBinding.fishLayout.resume()
+            }
+            mBinding.tvEnd.setOnClickListener {
+                mBinding.fishLayout.end()
+            }
+
+            mBinding.btnOpen.setOnClickListener {
+                DemoActivity.jumpTo(mContext)
+            }
+
+            mBinding.btnFishAdd.setOnClickListener {
+                mShoalFish.skinResList.add(R.mipmap.bg_blue_fish_shoal)
+                mShoalFish.skinResList.add(R.mipmap.bg_clown_fish_shoal)
+            }
+
+            mBinding.btnChange.setOnClickListener {
+                petFish.moveLeftResId = R.mipmap.ic_fish_pet_left_normal_fen
+                mBinding.fishLayout.notifyDataSetChanged()
+            }
+            mBinding.btnSpray.setOnClickListener {
+                petFish.updateFishStatus(FishStatus.THIRSTY)
                 mBinding.fishLayout.notifyDataSetChanged(0)
-                Toast.makeText(this, "click:贝壳!", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        mBinding.btnTravel.setOnClickListener {
-            status++
-            when (status % 2) {
-                0 -> {
-                    //旅行回来.
+            mBinding.btnShort.setOnClickListener {
+                status++
+                when (status % 3) {
+                    0 -> petFish.updateFishStatus(FishStatus.EXCITING)
+                    1 -> petFish.updateFishStatus(FishStatus.FLESH_UP)
+                    2 -> petFish.updateFishStatus(FishStatus.BEAUTIFY)
+                }
+                mBinding.fishLayout.notifyDataSetChanged(0)
+            }
+            mBinding.fishLayout.setOnItemClickListener {
+                if (it.id == R.id.shellView) {
                     petFish.updateFishStatus(FishStatus.NORMAL)
                     mBinding.fishLayout.notifyDataSetChanged(0)
+                    Toast.makeText(mContext, "click:贝壳!", Toast.LENGTH_SHORT).show()
                 }
-                1 -> {
-                    petFish.updateFishStatus(FishStatus.TRAVEL)
-                    mBinding.fishLayout.notifyDataSetChanged(0)
+            }
+
+            mBinding.btnTravel.setOnClickListener {
+                status++
+                when (status % 2) {
+                    0 -> {
+                        //旅行回来.
+                        petFish.updateFishStatus(FishStatus.NORMAL)
+                        mBinding.fishLayout.notifyDataSetChanged(0)
+                        waterBallView.visibility = View.GONE
+                    }
+                    1 -> {
+                        petFish.updateFishStatus(FishStatus.TRAVEL)
+                        mBinding.fishLayout.notifyDataSetChanged(0)
+                        waterBallView.visibility = View.VISIBLE
+                    }
                 }
             }
         }
-
     }
 
     private var status: Int = 0

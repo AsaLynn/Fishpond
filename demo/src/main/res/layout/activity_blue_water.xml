@@ -177,6 +177,15 @@
         app:layout_constraintTop_toBottomOf="@id/titleView"
         app:paddingPetAreaLeft="@dimen/dp_50" />
 
+    <com.water.ball.WaterBallView
+        android:id="@+id/waterBallView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/fishLayout"
+        app:layout_constraintRight_toRightOf="@id/fishLayout"
+        app:layout_constraintTop_toTopOf="@id/fishLayout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

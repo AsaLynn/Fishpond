@@ -39,7 +39,7 @@ class EnterActivity : AppCompatActivity() {
         mBinding.btnF.setOnClickListener {
             BallActivity.jumpTo(this)
         }
-        BallActivity.jumpTo(this)
+        BlueWaterActivity.jumpTo(this)
     }
 
 }

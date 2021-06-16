@@ -11,6 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/animsurfacedemo" />
+            <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/demo" />
             <option value="$PROJECT_DIR$/fishpond" />
             <option value="$PROJECT_DIR$/waterballview" />
