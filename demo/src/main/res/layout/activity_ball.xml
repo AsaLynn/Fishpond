@@ -40,7 +40,7 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--
-    <com.water.ball.WaterBallView
+    <com.water.fish.widget.WaterBallView
             android:id="@+id/waterBallView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
