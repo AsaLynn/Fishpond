@@ -21,6 +21,10 @@ import com.water.fish.R
  */
 class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
 
+    var soundEnabled = false
+
+    var rollEnabled = false
+
     private var ballBitmap: Bitmap? = null
 
     private var mWidth: Int = 0
@@ -79,7 +83,6 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
         attrs,
         defStyleAttr
     ) {
-        //setBackgroundColor(Color.TRANSPARENT)
         this.setZOrderOnTop(true)
         this.holder.setFormat(PixelFormat.TRANSLUCENT)
         ballBitmap = BitmapFactory.decodeResource(resources, R.drawable.ball)
@@ -104,6 +107,7 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
 
         computeRollingArea()
 
+        //获取传感器的类型(TYPE_ACCELEROMETER:加速度传感器)
         val sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         mSensorManager.registerListener(
             mBallSensorEventListener,
@@ -152,30 +156,37 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
     private inner class BallSensorEventListener : SensorEventListener {
 
         override fun onSensorChanged(event: SensorEvent) {
+            //定z坐标轴上的位置(加速度)
             gz = event.values[2]
-            gx = event.values[0] - 0.75.toFloat() //定x坐标轴上的位置
-            gy = event.values[1] - 0.105.toFloat() //定x坐标轴上的位置
-            Log.d("gz", gz.toString())
-            vx = vx - gx / 2
-            vy = vy + gy / 2
+            //定y坐标轴上的位置(加速度)
+            gy = event.values[1] - 0.105.toFloat()
+            //定x坐标轴上的位置(加速度)
+            gx = event.values[0] - 0.75.toFloat()
+            Log.d(TAG, "[gx:$gx,gy:$gy,gz:$gz]")
+
+            vx -= gx / 2
+            vy += gy / 2
             vx = vx * 199 / 200
             vy = vy * 199 / 200
-            mX = mX + vx / 2
-            mY = mY + vy / 2
+            mX += vx / 2
+            mY += vy / 2
             if (mX < 0) {
                 mX = 0f
                 if (lastx == mX) {
                     vx = 0f
                 } else {
                     vx = -vx * 3 / 4
-                    mSoundPool.play(
-                        soundIds["soundId1"] as Int,
-                        1f,
-                        1f,
-                        1,
-                        0,
-                        1f
-                    ) //音频地址，音量，音量，优先级，声音播放速率
+                    //音频地址，音量，音量，优先级，声音播放速率
+                    if (soundEnabled) {
+                        mSoundPool.play(
+                            soundIds["soundId1"] as Int,
+                            1f,
+                            1f,
+                            1,
+                            0,
+                            1f
+                        )
+                    }
                 }
             } else if (mX > areaWidth) {
                 mX = areaWidth.toFloat()
@@ -183,14 +194,17 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
                     vx = 0f
                 } else {
                     vx = -vx * 3 / 4
-                    mSoundPool.play(
-                        soundIds["soundId1"] as Int,
-                        1f,
-                        1f,
-                        1,
-                        0,
-                        1f
-                    ) //音频地址，音量，音量，优先级，声音播放速率
+                    //音频地址，音量，音量，优先级，声音播放速率
+                    if (soundEnabled) {
+                        mSoundPool.play(
+                            soundIds["soundId1"] as Int,
+                            1f,
+                            1f,
+                            1,
+                            0,
+                            1f
+                        )
+                    }
                 }
             }
             if (mY < 0) {
@@ -199,14 +213,17 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
                     vy = 0f
                 } else {
                     vy = -vy * 3 / 4
-                    mSoundPool.play(
-                        soundIds["soundId1"] as Int,
-                        1f,
-                        1f,
-                        1,
-                        0,
-                        1f
-                    ) //音频地址，音量，音量，优先级，声音播放速率
+                    //音频地址，音量，音量，优先级，声音播放速率
+                    if (soundEnabled) {
+                        mSoundPool.play(
+                            soundIds["soundId1"] as Int,
+                            1f,
+                            1f,
+                            1,
+                            0,
+                            1f
+                        )
+                    }
                 }
             } else if (mY > areaHeight) {
                 mY = areaHeight.toFloat()
@@ -214,25 +231,30 @@ class WaterBallView : SurfaceView, SurfaceHolder.Callback, Runnable {
                     vy = 0f
                 } else {
                     vy = -vy * 3 / 4
-                    mSoundPool.play(
-                        soundIds["soundId1"] as Int,
-                        1f,
-                        1f,
-                        1,
-                        0,
-                        1f
-                    ) //音频地址，音量，音量，优先级，声音播放速率
-                }
-            }
-            if (gz > 19) {
-                val thread: Thread = object : Thread() {
-                    override fun run() {
-                        super.run()
-                        Log.d("gz", gz.toString())
-                        mSoundPool.play(soundIds["soundId2"] as Int, 1f, 1f, 1, 0, 1f)
+                    //音频地址，音量，音量，优先级，声音播放速率
+                    if (soundEnabled){
+                        mSoundPool.play(
+                            soundIds["soundId1"] as Int,
+                            1f,
+                            1f,
+                            1,
+                            0,
+                            1f
+                        )
                     }
                 }
-                thread.start()
+            }
+            if (soundEnabled){
+                if (gz > 19) {
+                    val thread: Thread = object : Thread() {
+                        override fun run() {
+                            super.run()
+                            Log.d("gz", gz.toString())
+                            mSoundPool.play(soundIds["soundId2"] as Int, 1f, 1f, 1, 0, 1f)
+                        }
+                    }
+                    thread.start()
+                }
             }
             lastx = mX
             lasty = mY
