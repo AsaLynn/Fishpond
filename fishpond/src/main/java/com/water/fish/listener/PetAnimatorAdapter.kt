@@ -13,7 +13,7 @@ class PetAnimatorAdapter(view: IWhaleView, animationList: List<Animator>) :
     override fun onAnimationStart(animation: Animator, position: Int, marineView: IWhaleView) {
         if (!mStarted || !mRunning || mPaused || mAnimationEndRequested) return
         when (position) {
-            0, 3, 5 -> marineView.moveLeft()
+            0, 1, 3, 5, 6 -> marineView.moveLeft()
 
             2, 4, 7 -> marineView.moveRight()
         }
