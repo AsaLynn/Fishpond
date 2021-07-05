@@ -29,11 +29,11 @@ class ShellView : ConstraintLayout, IMarineView {
         LayoutInflater.from(context).inflate(R.layout.layout_shell_constraint, this)
     }
 
-    private val ivStone by lazy {
+    val ivStone by lazy {
         findViewById<ImageView>(R.id.ivStone)
     }
 
-    private val ivAIShell by lazy {
+    val ivAIShell by lazy {
         findViewById<GifImageView>(R.id.ivAIShell)
     }
 
@@ -42,11 +42,9 @@ class ShellView : ConstraintLayout, IMarineView {
     }
 
 
-
     override fun turnRight(nextAnimator: Animator) {
 
     }
-
 
 
     override fun turnLeft(nextAnimator: Animator) {

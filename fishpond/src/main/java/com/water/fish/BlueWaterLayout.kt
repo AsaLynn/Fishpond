@@ -37,7 +37,7 @@ class BlueWaterLayout : ConstraintLayout, View.OnClickListener, ISeaLayout {
         }
     }
 
-    private val shellView by lazy {
+    val shellView by lazy {
         findViewById<ShellView>(R.id.shellView).apply {
             setOnClickListener(this@BlueWaterLayout)
         }
